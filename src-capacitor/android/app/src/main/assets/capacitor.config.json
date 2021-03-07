@@ -1,0 +1,10 @@
+{
+  "appId": "com.fsqt.catdiary",
+  "appName": "냥중일기",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "url": "http://192.168.35.65:8080"
+  }
+}

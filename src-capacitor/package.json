@@ -1,0 +1,12 @@
+{
+  "name": "fsqt-frontend",
+  "version": "0.0.1",
+  "description": "집사들이 돕는 길고양이들의 일기장",
+  "author": "FSQT-uos-capstone",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "2.4.7",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}
