@@ -8,6 +8,7 @@
       <q-toolbar class="Toolbar justify-evenly">
         <q-btn unelevated :ripple="false" class="LoginButton" label="로그인" />
         <q-btn
+          to="/auth/register/nickname"
           unelevated
           :ripple="false"
           class="RegisterButton"
