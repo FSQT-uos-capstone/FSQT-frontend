@@ -20,6 +20,10 @@ const routes = [
       {
         path: "register/account",
         component: () => import("pages/auth/RegisterAccount.vue")
+      },
+      {
+        path: "register/email",
+        component: () => import("pages/auth/RegisterEmail.vue")
       }
     ]
   },

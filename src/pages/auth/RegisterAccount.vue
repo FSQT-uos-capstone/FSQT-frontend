@@ -41,7 +41,7 @@
     </div>
     <div class="row Control">
       <q-btn
-        to="/auth/register/account"
+        to="/auth/register/email"
         unelevated
         size="lg"
         color="black"
