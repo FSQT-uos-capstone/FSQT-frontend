@@ -16,7 +16,14 @@
       ></q-input>
     </div>
     <div class="row Control">
-      <q-btn unelevated size="lg" color="black" class="ButtonNext">다음</q-btn>
+      <q-btn
+        to="/auth/register/account"
+        unelevated
+        size="lg"
+        color="black"
+        class="ButtonNext"
+        >다음</q-btn
+      >
     </div>
     <div class="row Description">
       <p>
