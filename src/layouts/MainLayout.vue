@@ -7,6 +7,7 @@
     <q-footer class="Footer row">
       <q-toolbar class="Toolbar justify-around">
         <q-btn
+          to="/"
           flat
           round
           :ripple="false"
@@ -28,6 +29,7 @@
           class="col-2 PostButton"
         />
         <q-btn
+          to="/cats"
           flat
           round
           :ripple="false"
@@ -49,14 +51,14 @@
 <script>
 export default {
   name: "MainLayout",
-  beforeCreate() {
-    const isAuthenticated = false;
-    if (!isAuthenticated) this.$router.push({ path: "/gate" });
-  },
+  /*beforeCreate() {
+    console.log(this.$store.getters["auth/authenticated"]);
+    if (this.$store.getters["auth/authenticated"] === false)
+      this.$router.push({ path: "/gate" });
+  },*/
   data() {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: linksData
+      leftDrawerOpen: false
     };
   }
 };
