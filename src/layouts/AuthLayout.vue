@@ -1,7 +1,7 @@
 <template>
   <q-layout class="AuthLayout" view="hHh lpR fFf">
     <q-toolbar class="Toolbar">
-      <q-btn v-go-back flat round color="black" icon="west" />
+      <q-btn v-go-back flat round color="black" icon="eva-arrow-back-outline" />
     </q-toolbar>
     <q-page-container>
       <router-view />
