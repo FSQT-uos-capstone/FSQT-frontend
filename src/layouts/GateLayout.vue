@@ -6,7 +6,14 @@
 
     <q-footer class="Footer row">
       <q-toolbar class="Toolbar justify-evenly">
-        <q-btn unelevated :ripple="false" class="LoginButton" label="로그인" />
+        <q-btn
+          to="/"
+          unelevated
+          :ripple="false"
+          class="LoginButton"
+          label="로그인"
+          @click="signIn"
+        />
         <q-btn
           to="/auth/register/nickname"
           unelevated
@@ -24,6 +31,15 @@ export default {
   name: "GateLayout",
   data() {
     return {};
+  },
+  methods: {
+    async signIn(e, go) {
+      e.navigate = false;
+      this.$store.dispatch("auth/setAuthenticatedAsync", true).then(() => {
+        this.$router.go("/");
+      });
+      // go();
+    }
   }
 };
 </script>
