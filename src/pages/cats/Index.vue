@@ -9,7 +9,7 @@
     </q-header>
     <q-list class="List">
       <div v-for="cat in cats" :key="cat.id">
-        <q-item>
+        <q-item :to="{ path: `/cats/chat/${cat.id}` }">
           <q-item-section avatar>
             <q-avatar class="Profile">
               <img :src="cat.profile" :alt="cat.name" />
@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "PageCats",
+  name: "PageCatsIndex",
   data() {
     return {
       cats: [
@@ -39,17 +39,17 @@ export default {
           profile: "https://randomuser.me/api/portraits/thumb/men/17.jpg"
         },
         {
-          id: 0,
+          id: 1,
           name: "시냥이2",
           profile: "https://randomuser.me/api/portraits/thumb/men/18.jpg"
         },
         {
-          id: 0,
+          id: 2,
           name: "시냥이3",
           profile: "https://randomuser.me/api/portraits/thumb/men/19.jpg"
         },
         {
-          id: 0,
+          id: 3,
           name: "시냥이4",
           profile: "https://randomuser.me/api/portraits/thumb/men/20.jpg"
         }
@@ -64,7 +64,6 @@ export default {
   .Header {
     background-color: #ffffff;
     color: #000000;
-    height: 6vh;
     border-bottom: 1px solid #cccccc;
     .Toolbar {
       height: 100%;
