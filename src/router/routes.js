@@ -11,9 +11,22 @@ const routes = [
   {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Index.vue") }],
-    children: [{ path: "cats", component: () => import("pages/Cats.vue") }],
+    children: [
+      { path: "", component: () => import("pages/Index.vue") },
+      { path: "cats", component: () => import("pages/cats/Index.vue") }
+    ],
     beforeEnter: requireAuth()
+  },
+  {
+    path: "/cats/chat",
+    component: () => import("layouts/ChatLayout.vue"),
+    children: [
+      {
+        path: ":catId",
+        component: () => import("pages/cats/Chat.vue"),
+        props: true
+      }
+    ]
   },
   {
     path: "/gate",
