@@ -16,28 +16,32 @@
       </q-toolbar>
     </q-header>
     <div class="Messages">
-      <q-chat-message
-        v-for="message in messages"
-        :key="message.id"
-        :name="message.name"
-        :avatar="message.avatar"
-        :text="[message.text]"
-        :stamp="getStamp(now, message.time)"
-        :sent="message.sent"
-        :text-color="message.textColor"
-        :bg-color="message.bgColor"
-        text-sanitize
-      >
-      </q-chat-message>
+      <div ref="content">
+        <q-chat-message
+          v-for="message in messages"
+          :key="message.id"
+          :name="message.name"
+          :avatar="message.avatar"
+          :text="[message.text]"
+          :stamp="getStamp(now, message.time)"
+          :sent="message.sent"
+          :text-color="message.textColor"
+          :bg-color="message.bgColor"
+          text-sanitize
+        >
+        </q-chat-message>
+      </div>
     </div>
     <q-footer class="Footer">
       <q-toolbar class="Toolbar text-center">
         <q-input
+          ref="input"
           autogrow
           outlined
           color="black"
           class="Input"
-          v-model="myMessage"
+          :value="myMessage"
+          @input="value => (this.myMessage = value)"
         >
           <template v-slot:after>
             <q-btn
@@ -58,6 +62,8 @@
 </template>
 
 <script>
+const apiAddr = "https://catchat-ftlwa.run.goorm.io/api/chat";
+
 export default {
   name: "PageCatsChat",
   created() {
@@ -67,6 +73,9 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.timeInterval);
+  },
+  updated() {
+    this.$nextTick(() => this.scrollToEnd());
   },
   props: {
     catId: {
@@ -83,6 +92,10 @@ export default {
     };
   },
   methods: {
+    scrollToEnd() {
+      const content = this.$refs.content;
+      content.scrollTop = content.scrollHeight;
+    },
     getStamp(now, date) {
       const offset = now.getTime() - date.getTime();
       if (offset < 1000 * 60) {
@@ -94,6 +107,7 @@ export default {
       }
     },
     async sendMessage(e, go) {
+      // this.$refs.input.focus();
       e.navigate = false;
       this.messages = [
         ...this.messages,
@@ -104,27 +118,33 @@ export default {
           text: this.myMessage,
           sent: true,
           textColor: "white",
-          bgColor: "purple",
+          bgColor: "purple-4",
           time: new Date()
         }
       ];
       this.myMessage = "";
-      await new Promise((resolve, reject) => {
-        setTimeout(resolve, 2000);
-      });
-      this.messages = [
-        ...this.messages,
-        {
-          id: this.messages.length,
-          name: this.catId,
-          avatar: "https://cdn.quasar.dev/img/avatar2.jpg",
-          text: "ACK",
-          sent: false,
-          textColor: "white",
-          bgColor: "deep-orange",
-          time: new Date()
-        }
-      ];
+      this.$axios
+        .post(apiAddr, {
+          message: this.myMessage
+        })
+        .then(response => {
+          this.messages = [
+            ...this.messages,
+            {
+              id: this.messages.length,
+              name: this.catId,
+              avatar: "https://cdn.quasar.dev/img/avatar2.jpg",
+              text: response.data.message,
+              sent: false,
+              textColor: "white",
+              bgColor: "deep-orange-4",
+              time: new Date()
+            }
+          ];
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 };
