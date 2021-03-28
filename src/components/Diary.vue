@@ -49,7 +49,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <q-img :src="photoUrl" :ratio="1" style="width: 100vw" />
+        <q-img :src="photoUrl" :ratio="1" style="width: 100%" />
       </div>
     </div>
     <div class="row">
