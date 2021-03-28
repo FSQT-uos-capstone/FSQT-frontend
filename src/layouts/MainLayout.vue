@@ -15,6 +15,7 @@
           icon="eva-home-outline"
         />
         <q-btn
+          to="/search"
           flat
           round
           :ripple="false"
