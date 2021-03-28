@@ -13,6 +13,7 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/Index.vue") },
+      { path: "search", component: () => import("pages/search/Index.vue") },
       { path: "cats", component: () => import("pages/cats/Index.vue") }
     ],
     beforeEnter: requireAuth()
