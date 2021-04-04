@@ -5,7 +5,7 @@
         <q-badge class="Badge flex flex-center">
           서열 #1위 주인
         </q-badge>
-        <q-item class="q-px-none q-mx-none">
+        <q-item class="q-px-none q-mx-none" :to="`/cats/profile/${cat.id}`">
           <q-item-section side>
             <q-avatar>
               <img :src="cat.profileUrl" />
@@ -30,7 +30,7 @@
         <q-badge class="Badge flex flex-center">
           입덕부정 예비집사
         </q-badge>
-        <q-item class="q-px-none q-mx-none">
+        <q-item class="q-px-none q-mx-none" :to="`/users/profile/${user.id}`">
           <q-item-section>
             <q-item-label class="text-weight-bold text-right">{{
               user.name

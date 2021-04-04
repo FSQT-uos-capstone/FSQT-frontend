@@ -14,7 +14,17 @@ const routes = [
     children: [
       { path: "", component: () => import("pages/Index.vue") },
       { path: "search", component: () => import("pages/search/Index.vue") },
-      { path: "cats", component: () => import("pages/cats/Index.vue") }
+      { path: "cats", component: () => import("pages/cats/Index.vue") },
+      {
+        path: "cats/profile/:catId",
+        component: () => import("pages/cats/Profile.vue"),
+        props: true
+      },
+      {
+        path: "users/profile/:userId",
+        component: () => import("pages/users/Profile.vue"),
+        props: true
+      }
     ],
     beforeEnter: requireAuth()
   },
