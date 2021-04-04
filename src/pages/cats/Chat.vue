@@ -125,6 +125,7 @@ export default {
       this.myMessage = "";
       this.$axios
         .post(apiAddr, {
+          catid: parseInt(this.catId) % 2,
           message: this.myMessage
         })
         .then(response => {
