@@ -5,9 +5,13 @@
     </div>
     <div class="row Content">
       <q-input
+        ref="inputNickname"
+        @keyup.prevent="handleInputNickname"
+        v-bind:value="nickname"
+        type="text"
+        maxlength="12"
         outlined
         square
-        v-model="nickname"
         debounce="500"
         color="black"
         class="InputNickname"
@@ -17,11 +21,13 @@
     </div>
     <div class="row Control">
       <q-btn
+        @click="handleNextButton"
         to="/auth/register/account"
         unelevated
         size="lg"
         color="black"
         class="ButtonNext"
+        :disable="loading || !validated"
         >다음</q-btn
       >
     </div>
@@ -35,28 +41,56 @@
 </template>
 
 <script>
+import { DebounceMixin } from "../../mixins/debounce";
 export default {
   name: "PageAuthRegisterNickname",
   data() {
     return {
       nickname: null,
-      loading: false
+      loading: false,
+      validated: false
     };
   },
+  mixins: [DebounceMixin],
+  mounted() {
+    this.$refs.inputNickname.focus();
+  },
   methods: {
+    handleInputNickname($event) {
+      this.debounce(() => (this.nickname = $event.target.value), 500);
+    },
+    handleNextButton() {
+      this.$store.commit("user/assignRegister", { nickname: this.nickname });
+    },
     checkDuplicatedNickname(val) {
       this.loading = true;
       if (!val) {
         this.loading = false;
-        return "반드시 집사 이름이 있어야 고양님이 집사를 구분할 수 있습니다.";
+        this.validated = false;
+        return "집사 이름이 있어야 고양님이 집사를 구분할 수 있습니다.";
       }
       return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          this.loading = false;
-          if (val === "error")
+        this.$api
+          .get("/user", {
+            params: {
+              nickname: val
+            }
+          })
+          .then(res => {
+            if (res.status === 200) {
+              this.validated = true;
+              resolve(true);
+            } else {
+              this.validated = false;
+              throw new Error(res.status + " " + res.statusText);
+            }
+          })
+          .catch(() => {
             resolve("다른 집사가 고양이처럼 재빠르게 채간 이름입니다.");
-          resolve(!!val);
-        }, 1000);
+          })
+          .finally(() => {
+            this.loading = false;
+          });
       });
     }
   }

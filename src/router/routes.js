@@ -1,9 +1,8 @@
 import Store from "../store";
 
 const requireAuth = () => (from, to, next) => {
-  const authenticated = Store().state.auth.authenticated;
-  console.log(authenticated);
-  if (authenticated) return next();
+  const isAuthorized = Store().getters["auth/token"] !== null;
+  if (isAuthorized) return next();
   next("/gate");
 };
 
@@ -48,6 +47,10 @@ const routes = [
     path: "/auth",
     component: () => import("layouts/AuthLayout.vue"),
     children: [
+      {
+        path: "",
+        component: () => import("pages/auth/SignIn.vue")
+      },
       {
         path: "register/nickname",
         component: () => import("pages/auth/RegisterNickname.vue")

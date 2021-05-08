@@ -7,12 +7,11 @@
     <q-footer class="Footer row">
       <q-toolbar class="Toolbar justify-evenly">
         <q-btn
-          to="/"
+          to="/auth"
           unelevated
           :ripple="false"
           class="LoginButton"
           label="로그인"
-          @click="signIn"
         />
         <q-btn
           to="/auth/register/nickname"
@@ -33,13 +32,13 @@ export default {
     return {};
   },
   methods: {
-    async signIn(e, go) {
+    /*async signIn(e, go) {
       e.navigate = false;
       this.$store.dispatch("auth/setAuthenticatedAsync", true).then(() => {
         this.$router.go("/");
       });
       // go();
-    }
+    }*/
   }
 };
 </script>

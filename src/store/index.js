@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
 
 import auth from "./auth";
+import user from "./user";
 // import example from './module-example'
 
 Vue.use(Vuex);
@@ -19,7 +20,8 @@ Vue.use(Vuex);
 export default function(/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      auth
+      auth,
+      user
       // example
     },
     plugins: [createPersistedState()],

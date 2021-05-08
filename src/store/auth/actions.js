@@ -8,6 +8,22 @@ export function setAuthenticatedAsync({ state, commit }, payload) {
   });
 }
 
+export async function getToken({ commit }, payload) {
+  try {
+    const res = await this._vm.$api.post("/user/token", {
+      username: payload.username,
+      password: payload.password
+    });
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit("setToken", res.data.token);
+  } catch (e) {
+    commit("setToken", null);
+    throw e;
+  }
+}
+
 /*
 export function someAction (context) {
 }
