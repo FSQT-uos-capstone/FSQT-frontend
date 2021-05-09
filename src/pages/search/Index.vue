@@ -26,7 +26,7 @@
         <q-img :src="cat.profile">
           <div
             class="text-h5 absolute-center text-weight-bold text-center"
-            style="width: 70%"
+            style="width: 70%; min-width: 70%; max-width: 70%"
           >
             {{ cat.name }}
           </div>
@@ -126,9 +126,12 @@ export default {
   .List {
     width: 100%;
     .Card {
-      min-width: 45%;
-      width: 45%;
-      max-width: 45%;
+      min-width: 45vw;
+      width: 45vw;
+      max-width: 45vw;
+      min-height: 45vw;
+      height: 45vw;
+      max-width: 45vw;
     }
     .Profile {
       width: 10vh;
