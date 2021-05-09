@@ -4,6 +4,8 @@ import createPersistedState from "vuex-persistedstate";
 
 import auth from "./auth";
 import user from "./user";
+import cat from "./cat";
+import diary from "./diary";
 // import example from './module-example'
 
 Vue.use(Vuex);
@@ -21,7 +23,9 @@ export default function(/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       auth,
-      user
+      user,
+      cat,
+      diary
       // example
     },
     plugins: [createPersistedState()],
