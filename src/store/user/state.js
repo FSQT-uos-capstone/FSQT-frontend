@@ -5,6 +5,13 @@ export default function() {
       username: null,
       password: null,
       passwordConfirmation: null
+    },
+    target: {
+      id: null,
+      username: null,
+      email: null,
+      nickname: null,
+      cats: []
     }
   };
 }

@@ -7,6 +7,30 @@ export async function signIn({ commit, dispatch }, payload) {
   }
 }
 
+export async function getTarget({ commit }, userId) {
+  try {
+    const res = await this._vm.$api.get(`/user/${userId}`);
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit("assignTarget", {
+      id: userId,
+      username: res.data.email,
+      nickname: res.data.nickname,
+      cats: res.data.cats
+    });
+  } catch (e) {
+    commit("assignTarget", {
+      id: null,
+      nickname: null,
+      username: null,
+      cats: []
+    });
+    throw new Error(e);
+  } finally {
+  }
+}
+
 export async function register({ getters, commit }) {
   try {
     const register = getters["register"];

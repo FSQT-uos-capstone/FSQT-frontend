@@ -2,11 +2,17 @@
   <q-page class="column Profile">
     <div class="column" style="width: 100vw">
       <div class="flex justify-center">
-        <q-avatar size="6rem" color="purple" text-color="white" class="q-my-md"
-          >집</q-avatar
+        <q-avatar
+          size="6rem"
+          color="purple"
+          text-color="white"
+          class="q-my-md"
+          >{{ userTarget.nickname ? userTarget.nickname[0] : "" }}</q-avatar
         >
       </div>
-      <div class="text-h5 text-center text-weight-bold">시집사{{ userId }}</div>
+      <div class="text-h5 text-center text-weight-bold">
+        {{ userTarget.nickname ? userTarget.nickname : "" }}
+      </div>
       <div class="flex justify-center">
         <q-badge class="Badge flex flex-center">
           입덕부정 예비집사
@@ -30,12 +36,28 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  name: "PageCatsProfile",
+  name: "PageUsersProfile",
   props: {
     userId: {
       type: String,
-      default: ""
+      default: "-1"
+    }
+  },
+  computed: {
+    ...mapGetters({
+      authUserId: "auth/userId",
+      userTarget: "user/target"
+    })
+  },
+  async mounted() {
+    try {
+      await this.$store.dispatch("user/getTarget", this.userId);
+    } catch (e) {
+      console.error(e);
+    } finally {
     }
   },
   data() {

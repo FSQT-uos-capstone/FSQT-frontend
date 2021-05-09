@@ -38,11 +38,12 @@
           icon="img:icons/cil-cat.svg"
         />
         <q-btn
+          :to="`/users/profile/${authUserId}`"
           flat
           round
           :ripple="false"
           color="black"
-          icon="eva-message-circle-outline"
+          icon="eva-person-outline"
         />
       </q-toolbar>
     </q-footer>
@@ -50,13 +51,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "MainLayout",
-  /*beforeCreate() {
-    console.log(this.$store.getters["auth/authenticated"]);
-    if (this.$store.getters["auth/authenticated"] === false)
-      this.$router.push({ path: "/gate" });
-  },*/
+  computed: {
+    ...mapGetters({
+      authUserId: "auth/userId"
+    })
+  },
   data() {
     return {
       leftDrawerOpen: false

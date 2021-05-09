@@ -1,7 +1,7 @@
-import Store from "../store";
+import store from "../store/index";
 
 const requireAuth = () => (from, to, next) => {
-  const isAuthorized = Store().getters["auth/token"] !== null;
+  const isAuthorized = store().getters["auth/token"] !== null;
   if (isAuthorized) return next();
   next("/gate");
 };
@@ -36,7 +36,8 @@ const routes = [
         component: () => import("pages/cats/Chat.vue"),
         props: true
       }
-    ]
+    ],
+    beforeEnter: requireAuth()
   },
   {
     path: "/gate",

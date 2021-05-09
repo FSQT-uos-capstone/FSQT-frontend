@@ -18,8 +18,10 @@ export async function getToken({ commit }, payload) {
       throw new Error(res.status + " " + res.statusText);
     }
     commit("setToken", res.data.token);
+    commit("setUserId", res.data.id);
   } catch (e) {
     commit("setToken", null);
+    commit("setUserId", -1);
     throw e;
   }
 }
