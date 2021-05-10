@@ -3,7 +3,16 @@
     <q-header class="Header">
       <q-toolbar class="Toolbar text-center">
         <q-btn
+          v-if="$q.platform.is.capacitor"
           v-go-back
+          flat
+          round
+          color="black"
+          icon="eva-arrow-back-outline"
+        />
+        <q-btn
+          v-else
+          @click="$router.back()"
           flat
           round
           color="black"
@@ -122,12 +131,17 @@ export default {
           time: new Date()
         }
       ];
-      this.myMessage = "";
-      this.$axios
-        .post(apiAddr, {
-          catid: parseInt(this.catId) % 2,
-          message: this.myMessage
-        })
+      this.$chatbot
+        .post(
+          "",
+          {
+            catid: parseInt(this.catId) % 2,
+            message: this.myMessage
+          },
+          {
+            crossDomain: true
+          }
+        )
         .then(response => {
           this.messages = [
             ...this.messages,
@@ -142,6 +156,7 @@ export default {
               time: new Date()
             }
           ];
+          this.myMessage = "";
         })
         .catch(error => {
           console.error(error);
