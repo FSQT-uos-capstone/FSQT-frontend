@@ -1,7 +1,7 @@
 <template>
   <q-page class="column flex Search">
     <q-space />
-    <div class="row Title q-px-md q-py-lg">
+    <div class="row Title">
       고양이 찾기
     </div>
     <q-space />
@@ -9,21 +9,16 @@
       <q-input
         outlined
         square
-        v-model="search"
-        debounce="500"
+        @keyup.prevent="handleSearch"
+        v-bind:value="search"
         color="black"
         class="InputSearch"
         placeholder="고양이 이름"
       ></q-input>
     </div>
-    <div class="List row items-start flex-center">
-      <q-card
-        class="Card"
-        v-for="cat in cats"
-        :key="cat.id"
-        style="margin: 4px;"
-      >
-        <q-img :src="cat.profile">
+    <div class="List row items-start justify-between content-start q-px-md">
+      <q-card class="Card q-my-sm" v-for="cat in filteredCats" :key="cat.id">
+        <q-img src="https://cataas.com/cat?type=sq">
           <div
             class="text-h5 absolute-center text-weight-bold text-center"
             style="width: 70%; min-width: 70%; max-width: 70%"
@@ -33,88 +28,76 @@
         </q-img>
       </q-card>
     </div>
+    <q-space />
   </q-page>
 </template>
 
 <script>
+import { DebounceMixin } from "../../mixins/debounce";
+import { mapGetters } from "vuex";
+
 export default {
   name: "PageSearchIndex",
+  computed: {
+    ...mapGetters({
+      cats: "cat/list"
+    }),
+    filteredCats() {
+      return this.cats.filter(cat => {
+        if (!this.search) return true;
+        else return cat.name.includes(this.search);
+      });
+    }
+  },
+  mixins: [DebounceMixin],
+  async mounted() {
+    this.loaded = false;
+    try {
+      await this.$store.dispatch("cat/getList");
+      this.loaded = true;
+    } catch (e) {
+      console.error(e);
+      this.$q
+        .dialog({
+          title: "😭고양이 목록 가져오기 실패",
+          message: "고양이의 심술처럼 오류가 발생했습니다.",
+          ok: {
+            label: "확인",
+            unelevated: true,
+            color: "black",
+            dark: true
+          },
+          cancel: false,
+          persistent: true
+        })
+        .onOk(() => {})
+        .onDismiss(() => {});
+    }
+  },
   data() {
     return {
       search: null,
-      cats: [
-        {
-          id: 0,
-          name: "시냥이1",
-          profile: "https://randomuser.me/api/portraits/thumb/men/17.jpg"
-        },
-        {
-          id: 1,
-          name: "시냥이2",
-          profile: "https://randomuser.me/api/portraits/thumb/men/18.jpg"
-        },
-        {
-          id: 2,
-          name: "시냥이3",
-          profile: "https://randomuser.me/api/portraits/thumb/men/19.jpg"
-        },
-        {
-          id: 3,
-          name: "시냥이4",
-          profile: "https://randomuser.me/api/portraits/thumb/men/20.jpg"
-        },
-        {
-          id: 4,
-          name: "시냥이5",
-          profile: "https://randomuser.me/api/portraits/thumb/men/21.jpg"
-        },
-        {
-          id: 5,
-          name: "시냥이6",
-          profile: "https://randomuser.me/api/portraits/thumb/men/22.jpg"
-        },
-        {
-          id: 6,
-          name: "시냥이7",
-          profile: "https://randomuser.me/api/portraits/thumb/men/23.jpg"
-        },
-        {
-          id: 7,
-          name: "시냥이8",
-          profile: "https://randomuser.me/api/portraits/thumb/men/24.jpg"
-        },
-        {
-          id: 8,
-          name: "시냥이9",
-          profile: "https://randomuser.me/api/portraits/thumb/men/25.jpg"
-        },
-        {
-          id: 9,
-          name: "시냥이10",
-          profile: "https://randomuser.me/api/portraits/thumb/men/26.jpg"
-        },
-        {
-          id: 10,
-          name: "시냥이11",
-          profile: "https://randomuser.me/api/portraits/thumb/men/27.jpg"
-        },
-        {
-          id: 11,
-          name: "시냥이12",
-          profile: "https://randomuser.me/api/portraits/thumb/men/28.jpg"
-        }
-      ]
+      loaded: false
     };
+  },
+  methods: {
+    handleSearch($event) {
+      this.debounce(() => {
+        this.search = $event.target.value;
+      }, 500);
+    }
   }
 };
 </script>
 
 <style lang="scss">
 .Search {
+  overflow-y: hidden;
   .Title {
     color: #000000;
     font-size: 2.27rem;
     font-weight: medium;
+    padding-left: 20px;
   }
   .InputSearch {
     min-width: 100%;
@@ -125,17 +108,21 @@ export default {
   }
   .List {
     width: 100%;
+    min-height: 65.5vh;
+    height: 65.5vh;
+    max-height: 65.5vh;
+    overflow-y: scroll;
     .Card {
-      min-width: 45vw;
-      width: 45vw;
-      max-width: 45vw;
-      min-height: 45vw;
-      height: 45vw;
-      max-width: 45vw;
+      min-width: 44vw;
+      width: 44vw;
+      max-width: 44vw;
+      min-height: 44vw;
+      height: 44vw;
+      max-width: 44vw;
     }
     .Profile {
-      width: 10vh;
-      height: 10vh;
+      width: 10vw;
+      height: 10vw;
     }
   }
 }
