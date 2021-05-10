@@ -21,8 +21,7 @@
             :cat="content.cat"
             :user="content.user"
             :date="content.date"
-            :weather="content.weather"
-            :mood="content.mood"
+            :dayOfTheWeek="content.dayOfTheWeek"
             :photoUrl="content.photoUrl"
             :diaryContent="content.diaryContent"
             :likes="content.likes"
@@ -61,9 +60,8 @@ export default {
             name: "시냥집사1",
             profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
           },
-          date: "2021년 4월 2일 뭔요일",
-          weather: "☁︎",
-          mood: "😎",
+          date: "2021년 4월 2일",
+          dayOfTheWeek: "뭔요일",
           photoUrl: "https://placeimg.com/1000/1000/any",
           diaryContent:
             "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",
@@ -83,9 +81,8 @@ export default {
             name: "시냥집사1",
             profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
           },
-          date: "2021년 4월 2일 뭔요일",
-          weather: "☁︎",
-          mood: "😎",
+          date: "2021년 4월 2일",
+          dayOfTheWeek: "뭔요일",
           photoUrl: "https://placeimg.com/1000/1000/any",
           diaryContent:
             "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",
@@ -105,31 +102,8 @@ export default {
             name: "시냥집사1",
             profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
           },
-          date: "2021년 4월 2일 뭔요일",
-          weather: "☁︎",
-          mood: "😎",
-          photoUrl: "https://placeimg.com/1000/1000/any",
-          diaryContent:
-            "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",
-          likes: 114,
-          comment: 35
-        },
-        {
-          id: 3,
-          cat: {
-            id: 0,
-            name: "시냥이1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar2.jpg",
-            location: "시립대 정문"
-          },
-          user: {
-            id: 0,
-            name: "시냥집사1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
-          },
-          date: "2021년 4월 2일 뭔요일",
-          weather: "☁︎",
-          mood: "😎",
+          date: "2021년 4월 2일",
+          dayOfTheWeek: "뭔요일",
           photoUrl: "https://placeimg.com/1000/1000/any",
           diaryContent:
             "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",

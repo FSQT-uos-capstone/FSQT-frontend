@@ -2,9 +2,6 @@
   <div class="Diary">
     <div class="row Top">
       <div class="col Cat">
-        <q-badge class="Badge flex flex-center">
-          서열 #1위 주인
-        </q-badge>
         <q-item class="q-px-none q-mx-none" :to="`/cats/profile/${cat.id}`">
           <q-item-section side>
             <q-avatar>
@@ -19,17 +16,17 @@
           </q-item-section>
         </q-item>
       </div>
-      <div class="col column Info">
-        <div class="col text-weight-bold text-center">
-          {{ date }}
-        </div>
-        <div class="col text-center">날씨 - {{ weather }}</div>
-        <div class="col text-center">기분 - {{ mood }}</div>
+      <div class="col Info flex justify-center align-center">
+        <q-item class="q-px-none q-mx-none">
+          <q-item-section class="text-center">
+            <q-item-label class="text-weight-bold">{{ date }}</q-item-label>
+            <q-item-label class="text-weight-bold">{{
+              dayOfTheWeek
+            }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </div>
       <div class="col User">
-        <q-badge class="Badge flex flex-center">
-          입덕부정 예비집사
-        </q-badge>
         <q-item class="q-px-none q-mx-none" :to="`/users/profile/${user.id}`">
           <q-item-section>
             <q-item-label class="text-weight-bold text-right">{{
@@ -83,8 +80,7 @@ export default {
     cat: Object,
     user: Object,
     date: String,
-    weather: String,
-    mood: String,
+    dayOfTheWeek: String,
     photoUrl: String,
     diaryContent: String,
     likes: Number,
