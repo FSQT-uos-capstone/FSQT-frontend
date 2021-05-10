@@ -5,27 +5,30 @@
       고양이 일기장
     </div>
     <q-space />
-    <div class="row Content">
+    <div class="row Diaries">
       <carousel
         :paginationEnabled="false"
         :perPage="1"
         :scrollPerPage="true"
         style="max-width: 100vw"
       >
+        <slide v-if="!loaded" style="max-width: 100vw; width: 100vw;">
+          <DiarySkeleton></DiarySkeleton>
+        </slide>
         <slide
-          v-for="content in contents"
-          :key="content.id"
+          v-else
+          v-for="diary in diaries"
+          :key="diary.id"
           style="max-width: 100vw; width: 100vw;"
         >
           <Diary
-            :cat="content.cat"
-            :user="content.user"
-            :date="content.date"
-            :dayOfTheWeek="content.dayOfTheWeek"
-            :photoUrl="content.photoUrl"
-            :diaryContent="content.diaryContent"
-            :likes="content.likes"
-            :comment="content.comment"
+            :cat="diary.cat"
+            :user="diary.user"
+            :date="diary.date"
+            :dayOfTheWeek="diary.dayOfTheWeek"
+            :photoUrl="diary.photoURL"
+            :diaryContent="diary.content"
+            :emotions="diary.emotions"
           ></Diary>
         </slide>
       </carousel>
@@ -35,17 +38,68 @@
 
 <script>
 import Diary from "../components/Diary";
+import DiarySkeleton from "src/components/DiarySkeleton.vue";
 import { Carousel, Slide } from "vue-carousel";
+import { mapGetters } from "vuex";
 
 export default {
   name: "PageIndex",
   components: {
     Diary,
     Carousel,
-    Slide
+    Slide,
+    DiarySkeleton
+  },
+  computed: {
+    ...mapGetters({
+      diaries: "diary/list"
+    })
+  },
+  async mounted() {
+    this.loaded = false;
+    try {
+      await this.$store.dispatch("diary/getListDefault");
+      this.loaded = true;
+    } catch (e) {
+      console.error(e);
+      this.$q
+        .dialog({
+          title: "😭고양이 일기장 가져오기 실패",
+          message: "고양이의 심술처럼 오류가 발생했습니다.",
+          ok: {
+            label: "확인",
+            unelevated: true,
+            color: "black",
+            dark: true
+          },
+          cancel: false,
+          persistent: true
+        })
+        .onOk(() => {
+          this.$router.push("/gate");
+        })
+        .onDismiss(() => {
+          this.$router.push("/gate");
+        });
+    }
   },
   data() {
     return {
+      loaded: false,
+      ops: {
+        vuescroll: {
+          mode: "slide",
+          pullRefresh: {
+            enable: false,
+            tips: {
+              deactive: "Pull to Refresh",
+              active: "Release to Refresh",
+              start: "Refreshing...",
+              beforeDeactive: "Refresh Successfully!"
+            }
+          }
+        }
+      },
       contents: [
         {
           id: 0,
@@ -127,9 +181,12 @@ export default {
     font-weight: medium;
     padding-left: 20px;
   }
-  .Content {
+  .Diaries {
     max-width: 100vw;
     width: 100vw;
+    min-height: 73.5vh;
+    height: 73.5vh;
+    max-height: 73.5vh;
   }
 }
 </style>

@@ -1,3 +1,15 @@
+export async function getListDefault({ commit }) {
+  try {
+    const res = await this._vm.$api.get("/diary/");
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit("setList", res.data["diary_list"]);
+  } catch (e) {
+    throw e;
+  }
+}
+
 export async function createDiary({ getters, commit }) {
   try {
     const objectForm = getters["form"];

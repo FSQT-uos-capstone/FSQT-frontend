@@ -4,41 +4,41 @@
       <div class="col Cat">
         <q-item class="q-px-none q-mx-none" :to="`/cats/profile/${cat.id}`">
           <q-item-section side>
-            <q-avatar>
-              <img :src="cat.profileUrl" />
+            <q-avatar color="orange" text-color="white">
+              {{ cat.name[0] }}
+              <!--<img :src="cat.profileUrl" />-->
             </q-avatar>
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-bold">{{ cat.name }}</q-item-label>
-            <q-item-label caption class="Caption">{{
-              cat.location
-            }}</q-item-label>
+            <q-item-label class="text-weight-bold Caption"
+              >{{ cat.gender }},{{ cat.age }}살</q-item-label
+            >
           </q-item-section>
         </q-item>
       </div>
       <div class="col Info flex justify-center align-center">
         <q-item class="q-px-none q-mx-none">
           <q-item-section class="text-center">
-            <q-item-label class="text-weight-bold">{{ date }}</q-item-label>
-            <q-item-label class="text-weight-bold">{{
-              dayOfTheWeek
-            }}</q-item-label>
+            <q-item-label class="text-weight-bold">2021년 4월 2일</q-item-label>
+            <q-item-label class="text-weight-bold">수요일</q-item-label>
           </q-item-section>
         </q-item>
       </div>
       <div class="col User">
         <q-item class="q-px-none q-mx-none" :to="`/users/profile/${user.id}`">
           <q-item-section>
-            <q-item-label class="text-weight-bold text-right">{{
-              user.name
-            }}</q-item-label>
-            <q-item-label caption class="Caption text-right">{{
-              user.id
+            <q-item-label class="text-weight-bold text-right"
+              >집사닉네임</q-item-label
+            >
+            <q-item-label class="text-weight-bold Caption text-right">{{
+              user.username.substring(0, 6)
             }}</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-avatar>
-              <img :src="user.profileUrl" />
+            <q-avatar color="purple" text-color="white">
+              {{ user.username[0] }}
+              <!--<img :src="cat.profileUrl" />-->
             </q-avatar>
           </q-item-section>
         </q-item>
@@ -49,18 +49,73 @@
         <q-img :src="photoUrl" :ratio="1" style="width: 100%" />
       </div>
     </div>
-    <div class="row">
-      <div class="col Content">{{ diaryContent }}</div>
+    <div
+      class="flex justify-center"
+      style="
+    min-height: 15vh;
+    height: 15vh;
+    max-height: 15vh;"
+    >
+      <div class="Content">
+        {{ diaryContent }}
+      </div>
     </div>
     <div class="row">
       <div class="col flex justify-start">
         <q-btn
           :ripple="false"
+          flat
           unelevated
-          icon="eva-heart-outline"
-          :label="likes"
+          :icon="
+            emotions.find(x => x.user_id === authUserId && x.emotion === 1)
+              ? 'eva-heart'
+              : 'eva-heart-outline'
+          "
+          :color="
+            emotions.find(x => x.user_id === authUserId && x.emotion === 1)
+              ? 'red'
+              : 'black'
+          "
+          :label="emotions.filter(x => x.emotion === 1).length"
         />
       </div>
+      <div class="col flex justify-center">
+        <q-btn
+          :ripple="false"
+          flat
+          unelevated
+          :icon="
+            emotions.find(x => x.user_id === authUserId && x.emotion === 2)
+              ? 'eva-smiling-face'
+              : 'eva-smiling-face-outline'
+          "
+          :color="
+            emotions.find(x => x.user_id === authUserId && x.emotion === 2)
+              ? 'yellow'
+              : 'black'
+          "
+          :label="emotions.filter(x => x.emotion === 2).length"
+        />
+      </div>
+      <div class="col flex justify-end">
+        <q-btn
+          :ripple="false"
+          flat
+          unelevated
+          :icon="
+            emotions.find(x => x.user_id === authUserId && x.emotion === 3)
+              ? 'eva-umbrella'
+              : 'eva-umbrella-outline'
+          "
+          :color="
+            emotions.find(x => x.user_id === authUserId && x.emotion === 3)
+              ? 'blue'
+              : 'black'
+          "
+          :label="emotions.filter(x => x.emotion === 3).length"
+        />
+      </div>
+      <!--
       <div class="col flex justify-end">
         <q-btn
           :ripple="false"
@@ -68,12 +123,14 @@
           icon-right="eva-message-square-outline"
           :label="comment"
         />
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Diary",
   props: {
@@ -83,8 +140,12 @@ export default {
     dayOfTheWeek: String,
     photoUrl: String,
     diaryContent: String,
-    likes: Number,
-    comment: Number
+    emotions: Array
+  },
+  computed: {
+    ...mapGetters({
+      authUserId: "auth/userId"
+    })
   },
   data() {
     return {};
@@ -106,7 +167,7 @@ export default {
         border-radius: 6px;
       }
       .Caption {
-        font-size: 10px;
+        color: grey;
       }
     }
     .Info {
@@ -123,23 +184,21 @@ export default {
         border-radius: 6px;
       }
       .Caption {
-        font-size: 10px;
+        color: grey;
       }
     }
   }
   .Content {
-    white-space: pre;
     font-family: "NanumMyeongjo-Regular";
     text-align: center;
     font-size: 1.25rem;
     padding-top: 10px;
     padding-bottom: 10px;
-  }
-  .Bottom {
-    .Like {
-    }
-    .Comment {
-    }
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: scroll;
   }
 }
 </style>
