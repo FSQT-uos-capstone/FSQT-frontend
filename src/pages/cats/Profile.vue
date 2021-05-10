@@ -7,14 +7,11 @@
           color="deep-orange"
           text-color="white"
           class="q-my-md"
-          >냥</q-avatar
+          >{{ catTarget ? catTarget.name[0] : "" }}</q-avatar
         >
       </div>
-      <div class="text-h5 text-center text-weight-bold">시냥이{{ catId }}</div>
-      <div class="flex justify-center">
-        <q-badge class="Badge flex flex-center">
-          서열 #1위 주인
-        </q-badge>
+      <div class="text-h5 text-center text-weight-bold">
+        {{ catTarget ? catTarget.name : "" }}
       </div>
       <div class="flex justify-evenly q-my-md">
         <q-btn unelevated :ripple="false" class="FollowButton" label="모시기" />
@@ -34,12 +31,41 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "PageCatsProfile",
   props: {
     catId: {
       type: String,
-      default: ""
+      default: "-1"
+    }
+  },
+  computed: {
+    ...mapGetters({
+      catTarget: "cat/target"
+    })
+  },
+  async mounted() {
+    try {
+      await this.$store.dispatch("cat/getTarget", this.catId);
+    } catch (e) {
+      console.error(e);
+      this.$q
+        .dialog({
+          title: "😭고양이 조회 실패",
+          message: "고양이의 심술처럼 오류가 발생했습니다.",
+          ok: {
+            label: "확인",
+            unelevated: true,
+            color: "black",
+            dark: true
+          },
+          cancel: false,
+          persistent: true
+        })
+        .onOk(() => {})
+        .onDismiss(() => {});
     }
   },
   data() {

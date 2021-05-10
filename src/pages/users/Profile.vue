@@ -13,11 +13,6 @@
       <div class="text-h5 text-center text-weight-bold">
         {{ userTarget.nickname ? userTarget.nickname : "" }}
       </div>
-      <div class="flex justify-center">
-        <q-badge class="Badge flex flex-center">
-          입덕부정 예비집사
-        </q-badge>
-      </div>
       <div class="flex justify-evenly q-my-md">
         <!--<q-btn unelevated :ripple="false" class="FollowButton" label="모시기" />-->
       </div>
@@ -57,7 +52,21 @@ export default {
       await this.$store.dispatch("user/getTarget", this.userId);
     } catch (e) {
       console.error(e);
-    } finally {
+      this.$q
+        .dialog({
+          title: "😭집사 조회 실패",
+          message: "고양이의 심술처럼 오류가 발생했습니다.",
+          ok: {
+            label: "확인",
+            unelevated: true,
+            color: "black",
+            dark: true
+          },
+          cancel: false,
+          persistent: true
+        })
+        .onOk(() => {})
+        .onDismiss(() => {});
     }
   },
   data() {

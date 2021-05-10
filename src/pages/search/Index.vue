@@ -17,7 +17,12 @@
       ></q-input>
     </div>
     <div class="List row items-start justify-between content-start q-px-md">
-      <q-card class="Card q-my-sm" v-for="cat in filteredCats" :key="cat.id">
+      <q-card
+        class="Card q-my-sm"
+        v-for="cat in filteredCats"
+        :key="cat.id"
+        @click="$router.push(`/cats/profile/${cat.id}`)"
+      >
         <q-img src="https://cataas.com/cat?type=sq">
           <div
             class="text-h5 absolute-center text-weight-bold text-center"

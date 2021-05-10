@@ -1,5 +1,11 @@
 export default function() {
   return {
+    target: {
+      id: null,
+      name: null,
+      gender: null,
+      age: null
+    },
     list: [],
     listChat: [
       {

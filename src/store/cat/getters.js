@@ -1,3 +1,7 @@
+export function target(state) {
+  return state.target;
+}
+
 export function list(state) {
   return state.list;
 }
