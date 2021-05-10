@@ -8,7 +8,7 @@
       </q-toolbar>
     </q-header>
     <q-list class="List">
-      <div v-for="cat in cats" :key="cat.id">
+      <div v-for="cat in chatCats" :key="cat.id">
         <q-item :to="{ path: `/cats/chat/${cat.id}` }">
           <q-item-section avatar>
             <q-avatar class="Profile">
@@ -17,7 +17,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-bold">{{ cat.name }}</q-item-label>
-            <q-item-label caption lines="1">{{ cat.profile }}</q-item-label>
+            <q-item-label caption lines="2">{{ cat.desc }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -28,33 +28,17 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "PageCatsIndex",
+  computed: {
+    ...mapGetters({
+      chatCats: "cat/listChat"
+    })
+  },
   data() {
-    return {
-      cats: [
-        {
-          id: 0,
-          name: "시냥이1",
-          profile: "https://randomuser.me/api/portraits/thumb/men/17.jpg"
-        },
-        {
-          id: 1,
-          name: "시냥이2",
-          profile: "https://randomuser.me/api/portraits/thumb/men/18.jpg"
-        },
-        {
-          id: 2,
-          name: "시냥이3",
-          profile: "https://randomuser.me/api/portraits/thumb/men/19.jpg"
-        },
-        {
-          id: 3,
-          name: "시냥이4",
-          profile: "https://randomuser.me/api/portraits/thumb/men/20.jpg"
-        }
-      ]
-    };
+    return {};
   }
 };
 </script>

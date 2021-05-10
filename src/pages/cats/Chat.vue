@@ -19,7 +19,7 @@
           icon="eva-arrow-back-outline"
         />
         <q-toolbar-title class="text-subtitle1 text-weight-bold">
-          {{ catId }}
+          {{ chatCats[catId].name }}
         </q-toolbar-title>
         <q-btn flat round disabled />
       </q-toolbar>
@@ -49,8 +49,8 @@
           outlined
           color="black"
           class="Input"
-          :value="myMessage"
-          @input="value => (this.myMessage = value)"
+          @keyup.prevent="$event => (myMessage = $event.target.value)"
+          v-bind:value="myMessage"
         >
           <template v-slot:after>
             <q-btn
@@ -71,7 +71,8 @@
 </template>
 
 <script>
-const apiAddr = "https://catchat-ftlwa.run.goorm.io/api/chat";
+import { DebounceMixin } from "../../mixins/debounce";
+import { mapGetters } from "vuex";
 
 export default {
   name: "PageCatsChat",
@@ -86,11 +87,20 @@ export default {
   updated() {
     this.$nextTick(() => this.scrollToEnd());
   },
+  mounted() {
+    this.$refs.input.focus();
+  },
+  mixins: [DebounceMixin],
   props: {
     catId: {
       type: String,
       default: ""
     }
+  },
+  computed: {
+    ...mapGetters({
+      chatCats: "cat/listChat"
+    })
   },
   data() {
     return {
@@ -116,14 +126,14 @@ export default {
       }
     },
     async sendMessage(e, go) {
-      // this.$refs.input.focus();
+      e.preventDefault();
       e.navigate = false;
       this.messages = [
         ...this.messages,
         {
           id: this.messages.length,
           name: "나",
-          avatar: "https://cdn.quasar.dev/img/avatar4.jpg",
+          avatar: "https://cdn.quasar.dev/img/avatar1.jpg",
           text: this.myMessage,
           sent: true,
           textColor: "white",
@@ -131,12 +141,18 @@ export default {
           time: new Date()
         }
       ];
+      const targetMessage = this.myMessage;
+      this.myMessage = "";
+      this.$refs.input.focus();
+      this.debounce(() => {
+        window.scrollTo(0, this.$refs.content.scrollHeight);
+      }, 20);
       this.$chatbot
         .post(
           "",
           {
             catid: parseInt(this.catId) % 2,
-            message: this.myMessage
+            message: targetMessage
           },
           {
             crossDomain: true
@@ -147,8 +163,8 @@ export default {
             ...this.messages,
             {
               id: this.messages.length,
-              name: this.catId,
-              avatar: "https://cdn.quasar.dev/img/avatar2.jpg",
+              name: this.chatCats[this.catId].name,
+              avatar: "https://cataas.com/cat?type=sq",
               text: response.data.message,
               sent: false,
               textColor: "white",
@@ -156,10 +172,27 @@ export default {
               time: new Date()
             }
           ];
-          this.myMessage = "";
+          this.debounce(() => {
+            window.scrollTo(0, this.$refs.content.scrollHeight);
+          }, 20);
         })
         .catch(error => {
           console.error(error);
+          this.$q
+            .dialog({
+              title: "😭고양이가 부재 중입니다",
+              message: "돌아올 때까지 기다려주세요!",
+              ok: {
+                label: "확인",
+                unelevated: true,
+                color: "black",
+                dark: true
+              },
+              cancel: false,
+              persistent: true
+            })
+            .onOk(() => {})
+            .onDismiss(() => {});
         });
     }
   }
