@@ -4,6 +4,7 @@ export default function() {
     form: {
       photo: null,
       cat: null
-    }
+    },
+    monitoringTarget: []
   };
 }

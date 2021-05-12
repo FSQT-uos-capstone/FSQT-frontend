@@ -20,6 +20,7 @@
           vertical
           color="black"
           active-color="pink-13"
+          done-color="black"
           animated
           keep-alive
         >
@@ -28,7 +29,6 @@
             title="고양이 사진 고르기"
             icon="eva-image-outline"
             :done="step > 1"
-            color="black"
           >
             <croppa
               v-model="myCroppa"
@@ -54,7 +54,6 @@
             title="사진 속의 고양이 고르기"
             icon="eva-color-picker-outline"
             :done="step > 2"
-            color="black"
           >
             <q-select
               @input="setDiaryFormCat"
