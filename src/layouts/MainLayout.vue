@@ -32,7 +32,7 @@
           >
             <croppa
               v-model="myCroppa"
-              placeholder="고잉이 사진을 선택해주세요"
+              placeholder="고양이 사진을 선택해주세요"
               placeholder-color="#000"
               canvas-color="transparent"
               :show-loading="true"
