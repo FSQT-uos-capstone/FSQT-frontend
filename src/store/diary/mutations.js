@@ -6,6 +6,38 @@ export function appendList(state, payload) {
   state.list = [...state.list, ...payload];
 }
 
+export function setEmotionOnDiary(state, payload) {
+  const emotions = {
+    like: 1,
+    happy: 2,
+    sad: 3
+  };
+  const diaryIdx = state.list.findIndex(x => x.id === payload.diaryId);
+  if (diaryIdx === -1) return;
+  const emotionIdx = state.list[diaryIdx].emotions.findIndex(
+    x => x.user_id === payload.userId
+  );
+  let newEmotion = emotions[payload.status];
+  if (emotionIdx !== -1) {
+    if (state.list[diaryIdx].emotions[emotionIdx].emotion === newEmotion)
+      newEmotion = 0;
+    state.list[diaryIdx].emotions = state.list[diaryIdx].emotions.filter(
+      x => x.id !== state.list[diaryIdx].emotions[emotionIdx].id
+    );
+  }
+  state.list[diaryIdx].emotions = [
+    ...state.list[diaryIdx].emotions,
+    {
+      created: "PUFF",
+      diary_id: payload.diaryId,
+      emotion: newEmotion,
+      id: state.list[diaryIdx].emotions.length,
+      modified: "PUFF",
+      user_id: payload.userId
+    }
+  ];
+}
+
 export function assignForm(state, payload) {
   Object.assign(state.form, payload);
 }

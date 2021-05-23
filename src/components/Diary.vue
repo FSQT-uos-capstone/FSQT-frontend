@@ -77,6 +77,7 @@
               : 'black'
           "
           :label="emotions.filter(x => x.emotion === 1).length"
+          @click="setEmotion(id, 'like')"
         />
       </div>
       <div class="col flex justify-center">
@@ -86,8 +87,8 @@
           unelevated
           :icon="
             emotions.find(x => x.user_id === authUserId && x.emotion === 2)
-              ? 'eva-smiling-face'
-              : 'eva-smiling-face-outline'
+              ? 'eva-gift'
+              : 'eva-gift-outline'
           "
           :color="
             emotions.find(x => x.user_id === authUserId && x.emotion === 2)
@@ -95,6 +96,7 @@
               : 'black'
           "
           :label="emotions.filter(x => x.emotion === 2).length"
+          @click="setEmotion(id, 'happy')"
         />
       </div>
       <div class="col flex justify-end">
@@ -113,6 +115,7 @@
               : 'black'
           "
           :label="emotions.filter(x => x.emotion === 3).length"
+          @click="setEmotion(id, 'sad')"
         />
       </div>
       <!--
@@ -134,6 +137,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "Diary",
   props: {
+    id: Number,
     cat: Object,
     user: Object,
     date: String,
@@ -149,6 +153,23 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    async setEmotion(diaryId, status) {
+      try {
+        await this.$store.dispatch("diary/setEmotionOnDiary", {
+          diaryId: diaryId,
+          status: status,
+          userId: this.$store.getters["auth/userId"]
+        });
+      } catch (e) {
+        console.error(e);
+        this.$q.notify({
+          type: "negative",
+          message: `현재 일기장에 감정 표현을 할 수 없습니다.`
+        });
+      }
+    }
   }
 };
 </script>

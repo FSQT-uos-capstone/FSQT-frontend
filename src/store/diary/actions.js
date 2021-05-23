@@ -13,7 +13,21 @@ export async function getListDefault({ commit }) {
   }
 }
 
-export async function createDiary({ getters, commit }) {
+export async function setEmotionOnDiary({ commit }, payload) {
+  try {
+    const res = await this._vm.$api.post(
+      `/diary/emotion/${payload.diaryId}/${payload.status}`
+    );
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit("setEmotionOnDiary", payload);
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function createDiary({ commit }) {
   try {
     if (getters["monitoringTarget"].length > 3)
       throw new Error("현재 3개 이상의 일기장을 처리 중입니다.");

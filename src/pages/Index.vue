@@ -22,6 +22,7 @@
           style="max-width: 100vw; width: 100vw;"
         >
           <Diary
+            :id="diary.id"
             :cat="diary.cat"
             :user="diary.user"
             :date="diary.date"
