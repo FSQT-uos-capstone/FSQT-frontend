@@ -53,8 +53,10 @@
     </div>
     <div class="row Description">
       <p>
-        가입하기 버튼을 누르면, 냥중일기의 Terms of Service와 Privacy Policy에
-        동의합니다.
+        가입하기 버튼을 누르면, 냥중일기의
+        <a href="https://fsqt-uos-capstone.github.io/FSQT-privacy-policies/"
+          >Privacy Policy</a
+        >에 동의합니다.
       </p>
     </div>
   </q-page>
