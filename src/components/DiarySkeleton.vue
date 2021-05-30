@@ -27,7 +27,7 @@
     <div class="col-4" style="width: 100%; height: 100vmin;">
       <q-skeleton type="rect" style="width: 100%; height: 100%" />
     </div>
-    <div class="col-2 Content" style="width: 100%; height: 30vmin;">
+    <div class="col-2 Content" style="width: 100%; height: 5vh;">
       <q-skeleton type="rect" style="width: 100%; height: 100%" />
     </div>
     <div class="col flex justify-between">

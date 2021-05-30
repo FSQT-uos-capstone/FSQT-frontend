@@ -51,10 +51,6 @@
     </div>
     <div
       class="flex justify-center"
-      style="
-    min-height: 15vh;
-    height: 15vh;
-    max-height: 15vh;"
     >
       <div class="Content">
         {{ diaryContent }}

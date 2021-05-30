@@ -1,57 +1,48 @@
 <template>
   <q-page class="column flex PageDiscoverIndex">
-    <q-space />
-    <div class="row Title">
-      고양이 일기장
-    </div>
-    <q-space />
-    <div class="row Diaries">
-      <carousel
-        :paginationEnabled="false"
-        :perPage="1"
-        :scrollPerPage="true"
-        style="min-width: 100%; max-width: 100%; width; 100%; min-height: 100%; max-height: 100%; height: 100%;"
+    <vuescroll :ops="ops" class="column Diaries" @refresh-start="handleRS" @refresh-before-deactivate="handleRBD">
+      <div class="child-element Title">
+        고양이 일기장
+      </div>
+      <div
+        v-if="!loaded"
       >
-        <slide
-          v-if="!loaded"
-          style="min-width: 100%; max-width: 100%; width; 100%; min-height: 100%; max-height: 100%; height: 100%;"
-        >
-          <DiarySkeleton></DiarySkeleton>
-        </slide>
-        <slide
-          v-else
+        <DiarySkeleton style="padding-top: 20px"></DiarySkeleton>
+      </div>
+      <div
+        v-else
+      >
+        <Diary
           v-for="diary in diaries"
+          style="padding-top: 20px"
           :key="diary.id"
-          style="min-width: 100%; max-width: 100%; width; 100%; min-height: 100%; max-height: 100%; height: 100%;"
-        >
-          <Diary
-            :id="diary.id"
-            :cat="diary.cat"
-            :user="diary.user"
-            :date="diary.date"
-            :dayOfTheWeek="diary.dayOfTheWeek"
-            :photoUrl="diary.photoURL"
-            :diaryContent="diary.content"
-            :emotions="diary.emotions"
-          ></Diary>
-        </slide>
-      </carousel>
-    </div>
+          :id="diary.id"
+          :cat="diary.cat"
+          :user="diary.user"
+          :date="diary.date"
+          :dayOfTheWeek="diary.dayOfTheWeek"
+          :photoUrl="diary.photoURL"
+          :diaryContent="diary.content"
+          :emotions="diary.emotions"
+        ></Diary>
+      </div>
+    </vuescroll>
+    <div style="height: 12vh"></div>
+    <q-space></q-space>
   </q-page>
 </template>
 
 <script>
 import Diary from "../components/Diary";
 import DiarySkeleton from "src/components/DiarySkeleton.vue";
-import { Carousel, Slide } from "vue-carousel";
+import vuescroll from "vuescroll"
 import { mapGetters } from "vuex";
 
 export default {
   name: "PageIndex",
   components: {
     Diary,
-    Carousel,
-    Slide,
+    vuescroll,
     DiarySkeleton
   },
   computed: {
@@ -60,128 +51,96 @@ export default {
     })
   },
   async mounted() {
-    this.loaded = false;
-    try {
-      /*await this.$store.dispatch("diary/getListDefault");
-      this.loaded = true;*/
-    } catch (e) {
-      console.error(e);
-      this.$q
-        .dialog({
-          title: "😭고양이 일기장 가져오기 실패",
-          message: "고양이의 심술처럼 오류가 발생했습니다.",
-          ok: {
-            label: "확인",
-            unelevated: true,
-            color: "black",
-            dark: true
-          },
-          cancel: false,
-          persistent: true
-        })
-        .onOk(() => {
-          this.$router.push("/gate");
-        })
-        .onDismiss(() => {
-          this.$router.push("/gate");
-        });
-    }
+    await this.refreshDiaryList();
   },
   data() {
     return {
       loaded: false,
       ops: {
         vuescroll: {
-          mode: "slide",
+          mode: 'slide',
           pullRefresh: {
-            enable: false,
+            enable: true,
             tips: {
-              deactive: "Pull to Refresh",
-              active: "Release to Refresh",
-              start: "Refreshing...",
-              beforeDeactive: "Refresh Successfully!"
+              deactive: '당겨서 새로 불러오기',
+              active: '놓아서 새로 불러오기',
+              start: '새로 불러오는 중...',
+              beforeDeactive: '새로 불러오기 성공!'
+            }
+          },
+          pushLoad: {
+            enable: true,
+            auto: true,
+            autoLoadDistance: 10,
+            tips: {
+              deactive: '당겨서 불러오기',
+              active: '놓아서 불러오기',
+              start: '불러오는 중...',
+              beforeDeactive: '불러오기 성공!'
             }
           }
+        },
+        bar: {
+          disable: true,
+        },
+        scrollPanel: {
+          scrollingY: true,
+          speed: 800,
+          easing: "easeInOutQuad",
+          verticalNativeBarPos: 'right'
         }
       },
-      contents: [
-        {
-          id: 0,
-          cat: {
-            id: 0,
-            name: "시냥이1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar2.jpg",
-            location: "시립대 정문"
-          },
-          user: {
-            id: 0,
-            name: "시냥집사1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
-          },
-          date: "2021년 4월 2일",
-          dayOfTheWeek: "뭔요일",
-          photoUrl: "https://placeimg.com/1000/1000/any",
-          diaryContent:
-            "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",
-          likes: 114,
-          comment: 35
-        },
-        {
-          id: 1,
-          cat: {
-            id: 0,
-            name: "시냥이1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar2.jpg",
-            location: "시립대 정문"
-          },
-          user: {
-            id: 0,
-            name: "시냥집사1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
-          },
-          date: "2021년 4월 2일",
-          dayOfTheWeek: "뭔요일",
-          photoUrl: "https://placeimg.com/1000/1000/any",
-          diaryContent:
-            "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",
-          likes: 114,
-          comment: 35
-        },
-        {
-          id: 2,
-          cat: {
-            id: 0,
-            name: "시냥이1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar2.jpg",
-            location: "시립대 정문"
-          },
-          user: {
-            id: 0,
-            name: "시냥집사1",
-            profileUrl: "https://cdn.quasar.dev/img/avatar4.jpg"
-          },
-          date: "2021년 4월 2일",
-          dayOfTheWeek: "뭔요일",
-          photoUrl: "https://placeimg.com/1000/1000/any",
-          diaryContent:
-            "난 차가운 도시의 고양이...\n오늘도 밥을 먹는다.\n오늘은 사료 맛이 괜찮구만.",
-          likes: 114,
-          comment: 35
-        }
-      ]
     };
+  },
+  methods: {
+    async refreshDiaryList() {
+      this.loaded = false;
+      try {
+        await this.$store.dispatch("diary/getListDefault");
+        this.loaded = true;
+      } catch (e) {
+        console.error(e);
+        this.$q
+          .dialog({
+            title: "😭고양이 일기장 가져오기 실패",
+            message: "고양이의 심술처럼 오류가 발생했습니다.",
+            ok: {
+              label: "확인",
+              unelevated: true,
+              color: "black",
+              dark: true
+            },
+            cancel: false,
+            persistent: true
+          })
+          .onOk(() => {
+            this.$router.push("/gate");
+          })
+          .onDismiss(() => {
+            this.$router.push("/gate");
+          });
+      }
+    },
+    async handleRS(vsInstance, refreshDom, done) {
+      const vm = this;
+      await this.refreshDiaryList();
+      done();
+    },
+    handleRBD(vm, loadDom, done) {
+      setTimeout(() => {
+        done();
+      }, 500);
+    },
   }
 };
 </script>
 
 <style lang="scss">
 .PageDiscoverIndex {
-  min-width: 100vw;
-  width: 100vw;
-  max-width: 100vw;
   min-height: 92vh;
   height: 92vh;
   max-height: 92vh;
+  overflow-y: hidden;
   .Toolbar {
     padding: 0;
   }
@@ -189,18 +148,18 @@ export default {
     color: #000000;
     font-size: 2.27rem;
     font-weight: medium;
-    padding-left: 20px;
   }
   .Diaries {
-    min-width: 96vw;
-    max-width: 96vw;
-    width: 96vw;
-    min-height: 78%;
-    height: 78%;
-    max-height: 78%;
-    margin-bottom: 2vw;
-    margin-left: 2vw;
-    margin-right: 2vw;
+    display: block;
+    overflow-y: auto;
+    min-width: calc(100vw - 40px);
+    max-width: calc(100vw - 40px);
+    width: calc(100vw - 40px);
+    min-height: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }
 </style>
