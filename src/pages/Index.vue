@@ -10,16 +10,19 @@
         :paginationEnabled="false"
         :perPage="1"
         :scrollPerPage="true"
-        style="max-width: 100vw"
+        style="min-width: 100%; max-width: 100%; width; 100%; min-height: 100%; max-height: 100%; height: 100%;"
       >
-        <slide v-if="!loaded" style="max-width: 100vw; width: 100vw;">
+        <slide
+          v-if="!loaded"
+          style="min-width: 100%; max-width: 100%; width; 100%; min-height: 100%; max-height: 100%; height: 100%;"
+        >
           <DiarySkeleton></DiarySkeleton>
         </slide>
         <slide
           v-else
           v-for="diary in diaries"
           :key="diary.id"
-          style="max-width: 100vw; width: 100vw;"
+          style="min-width: 100%; max-width: 100%; width; 100%; min-height: 100%; max-height: 100%; height: 100%;"
         >
           <Diary
             :id="diary.id"
@@ -59,8 +62,8 @@ export default {
   async mounted() {
     this.loaded = false;
     try {
-      await this.$store.dispatch("diary/getListDefault");
-      this.loaded = true;
+      /*await this.$store.dispatch("diary/getListDefault");
+      this.loaded = true;*/
     } catch (e) {
       console.error(e);
       this.$q
@@ -173,6 +176,12 @@ export default {
 
 <style lang="scss">
 .PageDiscoverIndex {
+  min-width: 100vw;
+  width: 100vw;
+  max-width: 100vw;
+  min-height: 92vh;
+  height: 92vh;
+  max-height: 92vh;
   .Toolbar {
     padding: 0;
   }
@@ -183,11 +192,15 @@ export default {
     padding-left: 20px;
   }
   .Diaries {
-    max-width: 100vw;
-    width: 100vw;
-    min-height: 73.5vh;
-    height: 73.5vh;
-    max-height: 73.5vh;
+    min-width: 96vw;
+    max-width: 96vw;
+    width: 96vw;
+    min-height: 78%;
+    height: 78%;
+    max-height: 78%;
+    margin-bottom: 2vw;
+    margin-left: 2vw;
+    margin-right: 2vw;
   }
 }
 </style>
