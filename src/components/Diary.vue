@@ -1,25 +1,17 @@
 <template>
   <div class="Diary">
     <div class="row Top">
-      <div class="col Cat">
-        <q-item class="q-px-none q-mx-none" :to="`/cats/profile/${cat.id}`">
+      <div class="col Info flex justify-left align-center">
+        <q-item class="q-px-none q-mx-none">
           <q-item-section side>
-            <q-avatar color="orange" text-color="white">
-              {{ cat.name[0] }}
-              <!--<img :src="cat.profileUrl" />-->
+            <q-avatar
+              color="grey"
+              text-color="white"
+              icon="eva-calendar-outline"
+            >
             </q-avatar>
           </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-weight-bold">{{ cat.name }}</q-item-label>
-            <q-item-label class="text-weight-bold Caption"
-              >{{ cat.gender }},{{ cat.age }}살</q-item-label
-            >
-          </q-item-section>
-        </q-item>
-      </div>
-      <div class="col Info flex justify-center align-center">
-        <q-item class="q-px-none q-mx-none">
-          <q-item-section class="text-center">
+          <q-item-section class="text-left">
             <q-item-label class="text-weight-bold">2021년 4월 2일</q-item-label>
             <q-item-label class="text-weight-bold">수요일</q-item-label>
           </q-item-section>
@@ -49,12 +41,8 @@
         <q-img :src="photoUrl" :ratio="1" style="width: 100%" />
       </div>
     </div>
-    <div
-      class="flex justify-center"
-    >
-      <div class="Content">
-        {{ diaryContent }}
-      </div>
+    <div class="flex justify-center">
+      <div class="Content">{{ diaryContent.replace(".", "\n") }}</div>
     </div>
     <div class="row">
       <div class="col flex justify-start">
@@ -216,6 +204,7 @@ export default {
     height: 100%;
     max-height: 100%;
     overflow-y: scroll;
+    white-space: pre-wrap;
   }
 }
 </style>

@@ -27,14 +27,14 @@ export async function setEmotionOnDiary({ commit }, payload) {
   }
 }
 
-export async function createDiary({ commit }) {
+export async function createDiary({ getters, commit }) {
   try {
     if (getters["monitoringTarget"].length > 3)
       throw new Error("현재 3개 이상의 일기장을 처리 중입니다.");
     const objectForm = getters["form"];
     const form = new FormData();
     form.append("photo", objectForm.photo);
-    form.append("catId", objectForm.cat.value);
+    form.append("tags", objectForm.tags.join(","));
     const res = await this._vm.$api.post("/diary/", form, {
       headers: {
         "Content-Type": "multipart/form-data"
@@ -45,7 +45,7 @@ export async function createDiary({ commit }) {
     }
     commit("assignForm", {
       photo: null,
-      catId: null
+      tags: null
     });
     const monitor = () => {
       try {

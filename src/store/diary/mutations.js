@@ -42,8 +42,8 @@ export function assignForm(state, payload) {
   Object.assign(state.form, payload);
 }
 
-export function setFormCat(state, payload) {
-  state.form.cat = payload;
+export function setFormTags(state, payload) {
+  state.form.tags = payload;
 }
 
 export function setMonitoringTarget(state, payload) {

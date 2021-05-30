@@ -3,7 +3,7 @@ export default function() {
     list: [],
     form: {
       photo: null,
-      cat: null
+      tags: null
     },
     monitoringTarget: []
   };

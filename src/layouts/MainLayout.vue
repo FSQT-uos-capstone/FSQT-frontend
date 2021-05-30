@@ -30,6 +30,8 @@
             icon="eva-image-outline"
             :done="step > 1"
           >
+            Drag, pinch and zoom으로 올라갈 사진을 간단하게 바꿔보세요!
+
             <croppa
               v-model="myCroppa"
               placeholder="고양이 사진을 선택해주세요"
@@ -51,19 +53,32 @@
 
           <q-step
             :name="2"
-            title="사진 속의 고양이 고르기"
+            title="해시태그 넣기"
             icon="eva-color-picker-outline"
             :done="step > 2"
           >
+            이 사진 속 고양이는 누구인가요? 덧붙일 단어가 떠오르시나요?
+            해시태그를 통해 알려주세요! <code>Enter</code> 를 통해 추가하실 수
+            있습니다.
+
             <q-select
-              @input="setDiaryFormCat"
-              v-bind:value="diaryForm.cat"
-              :options="catListSelect"
+              ref="inputTags"
+              @input="setDiaryFormTags"
+              @new-value="checkHashOnTag"
+              :rules="[
+                val =>
+                  val.lastIndexOf('#') <= 0 || '올바르지 않은 해시태그입니다.'
+              ]"
+              v-bind:value="diaryForm.tags"
+              use-input
+              use-chips
+              multiple
+              hide-dropdown-icon
+              input-debounce="0"
+              new-value-mode="toggle"
               stack-label
               color="black"
-              behavior="menu"
-            >
-            </q-select>
+            />
             <q-stepper-navigation>
               <q-btn
                 outline
@@ -78,6 +93,11 @@
                 color="black"
                 label="업로드"
                 :loading="loadingUpload"
+                :disable="
+                  diaryForm.tags === null ||
+                    diaryForm.tags.length === 0 ||
+                    preventUpload
+                "
               />
             </q-stepper-navigation>
           </q-step>
@@ -193,12 +213,27 @@ export default {
       myCroppa: {},
       step: 1,
       loadingCats: false,
-      loadingUpload: false
+      loadingUpload: false,
+      preventUpload: false
     };
   },
   methods: {
-    setDiaryFormCat(payload) {
-      this.$store.commit("diary/setFormCat", payload);
+    setDiaryFormTags(payload) {
+      this.$store.commit("diary/setFormTags", payload);
+    },
+    checkHashOnTag(val, done) {
+      if (val.indexOf("#") === -1) {
+        done("#" + val);
+        this.$refs.inputTags.resetValidation();
+        this.preventUpload = false;
+      } else if (val.lastIndexOf("#") !== 0) {
+        done();
+        this.preventUpload = !this.$refs.inputTags.validate(val);
+      } else {
+        done(val);
+        this.$refs.inputTags.resetValidation();
+        this.preventUpload = false;
+      }
     },
     async selectFile() {
       const blob = await this.myCroppa.promisedBlob("image/png", 0.8);
