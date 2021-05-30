@@ -1,11 +1,9 @@
 <template>
   <q-page class="column flex Search">
-    <q-space />
     <div class="row Title">
-      고양이 찾기
+      해시태그
     </div>
-    <q-space />
-    <div class="row q-px-md q-pb-sm">
+    <div class="List row items-start justify-between content-start q-px-md">
       <q-input
         outlined
         square
@@ -13,10 +11,12 @@
         v-bind:value="search"
         color="black"
         class="InputSearch"
-        placeholder="고양이 이름"
-      ></q-input>
-    </div>
-    <div class="List row items-start justify-between content-start q-px-md">
+        placeholder="검색"
+      >
+        <template v-slot:prepend>
+          <q-icon name="eva-search-outline" />
+        </template>
+      </q-input>
       <q-card
         class="Card q-my-sm"
         v-for="cat in filteredCats"
@@ -110,6 +110,7 @@ export default {
     .q-field__control::before {
       border: 2px solid #000000;
     }
+    padding-bottom: 10px;
   }
   .List {
     width: 100%;
@@ -117,6 +118,7 @@ export default {
     height: 65.5vh;
     max-height: 65.5vh;
     overflow-y: scroll;
+    margin-top: 20px;
     .Card {
       min-width: 44vw;
       width: 44vw;
