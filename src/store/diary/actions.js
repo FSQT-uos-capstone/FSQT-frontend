@@ -1,4 +1,86 @@
+const dayOfTheWeek = [
+  "일요일",
+  "월요일",
+  "화요일",
+  "수요일",
+  "목요일",
+  "금요일",
+  "토요일"
+];
+
 export async function getListDefault({ commit }) {
+  try {
+    const res = await this._vm.$api.get("/diary/");
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit(
+      "setList",
+      res.data["diary_list"]
+        .sort((x, y) => x.id > y.id)
+        .map(x => {
+          const dateObj = new Date(x.created);
+          x.date = `${dateObj.getFullYear()}년 ${dateObj.getMonth() +
+            1}월 ${dateObj.getDate()}일`;
+          x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
+          if (x.tags) x.tags = x.tags.split(",");
+          return x;
+        })
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function getListSpecificUser({ commit }, payload) {
+  try {
+    const res = await this._vm.$api.get(`/diary?userId=${payload.userId}`);
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit(
+      "setList",
+      res.data["diary_list"]
+        .sort((x, y) => x.id > y.id)
+        .map(x => {
+          const dateObj = new Date(x.created);
+          x.date = `${dateObj.getFullYear()}년 ${dateObj.getMonth() +
+            1}월 ${dateObj.getDate()}일`;
+          x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
+          if (x.tags) x.tags = x.tags.split(",");
+          return x;
+        })
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function getListSpecificTag({ commit }, payload) {
+  try {
+    const res = await this._vm.$api.get(`/diary/tag/${payload}`);
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit(
+      "setList",
+      res.data
+        .sort((x, y) => x.id > y.id)
+        .map(x => {
+          const dateObj = new Date(x.created);
+          x.date = `${dateObj.getFullYear()}년 ${dateObj.getMonth() +
+            1}월 ${dateObj.getDate()}일`;
+          x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
+          if (x.tags) x.tags = x.tags.split(",");
+          return x;
+        })
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function getList({ commit }) {
   try {
     const res = await this._vm.$api.get("/diary/");
     if (res.status !== 200) {

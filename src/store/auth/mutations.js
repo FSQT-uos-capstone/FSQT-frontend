@@ -12,6 +12,10 @@ export function setUserId(state, payload) {
   state.userId = payload;
 }
 
+export function assignProfileForm(state, payload) {
+  Object.assign(state.profileForm, payload);
+}
+
 /*
 export function someMutation (state) {
 }

@@ -11,6 +11,7 @@ export default function() {
       username: null,
       email: null,
       nickname: null,
+      profile_img: null,
       cats: []
     }
   };

@@ -26,6 +26,27 @@ export async function getToken({ commit }, payload) {
   }
 }
 
+export async function updateProfileImage({ getters, commit }) {
+  try {
+    const objectForm = getters["profileForm"];
+    const form = new FormData();
+    form.append("profile_img_file", objectForm.photo);
+    const res = await this._vm.$api.patch(`/user/`, form, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit("assignProfileForm", {
+      photo: null
+    });
+  } catch (e) {
+    throw e;
+  }
+}
+
 /*
 export function someAction (context) {
 }

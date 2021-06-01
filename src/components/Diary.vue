@@ -12,15 +12,17 @@
             </q-avatar>
           </q-item-section>
           <q-item-section class="text-left">
-            <q-item-label class="text-weight-bold">2021년 4월 2일</q-item-label>
-            <q-item-label class="text-weight-bold">수요일</q-item-label>
+            <q-item-label class="text-weight-bold">{{ date }}</q-item-label>
+            <q-item-label class="text-weight-bold">{{
+              dayOfTheWeek
+            }}</q-item-label>
           </q-item-section>
         </q-item>
       </div>
       <div class="col User">
         <q-item class="q-px-none q-mx-none" :to="`/users/profile/${user.id}`">
           <q-item-section>
-            <q-item-label class="text-weight-bold text-right">
+            <q-item-label class="text-weight-bold text-right text-black">
               {{ profile.nickname }}
             </q-item-label>
             <q-item-label class="text-weight-bold Caption text-right">{{
@@ -34,7 +36,9 @@
               text-color="white"
             >
               {{ profile.nickname[0] }}
-              <!--<img :src="cat.profileUrl" />-->
+            </q-avatar>
+            <q-avatar v-else>
+              <img :src="profile.profile_img_url" />
             </q-avatar>
           </q-item-section>
         </q-item>
@@ -49,6 +53,11 @@
       <div class="Content">
         {{ diaryContent ? diaryContent.replace(".", "\n") : "" }}
       </div>
+    </div>
+    <div class="row">
+      <q-chip v-for="(tag, idx) in tags" :key="idx">
+        {{ tag }}
+      </q-chip>
     </div>
     <div class="row">
       <div class="col flex justify-start">
@@ -108,15 +117,6 @@
           @click="setEmotion(id, 'sad')"
         />
       </div>
-      <!--
-      <div class="col flex justify-end">
-        <q-btn
-          :ripple="false"
-          unelevated
-          icon-right="eva-message-square-outline"
-          :label="comment"
-        />
-      </div>-->
     </div>
   </div>
 </template>
@@ -135,7 +135,8 @@ export default {
     dayOfTheWeek: String,
     photoUrl: String,
     diaryContent: String,
-    emotions: Array
+    emotions: Array,
+    tags: Array
   },
   computed: {
     ...mapGetters({

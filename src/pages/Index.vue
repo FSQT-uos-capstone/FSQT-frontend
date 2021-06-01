@@ -26,6 +26,7 @@
           :photoUrl="diary.photoURL"
           :diaryContent="diary.content"
           :emotions="diary.emotions"
+          :tags="diary.tags"
         ></Diary>
       </div>
     </vuescroll>

@@ -10,6 +10,10 @@ export function userId(state) {
   return state.userId;
 }
 
+export function profileForm(state) {
+  return state.profileForm;
+}
+
 /*
 export function someGetter (state) {
 }

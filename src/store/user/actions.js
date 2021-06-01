@@ -17,14 +17,14 @@ export async function getTarget({ commit }, userId) {
       id: userId,
       username: res.data.email,
       nickname: res.data.nickname,
-      cats: res.data.cats
+      profile_img: res.data.profile_img
     });
   } catch (e) {
     commit("assignTarget", {
       id: null,
       nickname: null,
       username: null,
-      cats: []
+      profile_img: null
     });
     throw new Error(e);
   } finally {

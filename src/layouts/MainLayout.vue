@@ -12,7 +12,14 @@
     >
       <q-card class="my-card">
         <q-card-section class="row items-center">
-          <q-btn icon="eva-close" flat round dense v-close-popup />
+          <q-btn
+            icon="eva-close"
+            flat
+            round
+            dense
+            v-close-popup
+            @click="closeDialog"
+          />
         </q-card-section>
         <q-stepper
           ref="stepper"
@@ -112,10 +119,7 @@
             <q-stepper-navigation>
               <q-btn
                 unelevated
-                @click="
-                  uploader = false;
-                  step = 1;
-                "
+                @click="closeDialog"
                 color="black"
                 label="완료"
               />
@@ -220,6 +224,11 @@ export default {
   methods: {
     setDiaryFormTags(payload) {
       this.$store.commit("diary/setFormTags", payload);
+    },
+    closeDialog() {
+      this.setDiaryFormTags([]);
+      this.uploader = false;
+      this.step = 1;
     },
     checkHashOnTag(val, done) {
       if (val.indexOf("#") === -1) {

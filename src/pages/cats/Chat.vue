@@ -99,8 +99,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      chatCats: "cat/listChat"
+      chatCats: "cat/listChat",
+      authUserId: "auth/userId",
+      userTarget: "user/target"
     })
+  },
+  async mounted() {
+    await this.initProfile();
   },
   data() {
     return {
@@ -111,6 +116,28 @@ export default {
     };
   },
   methods: {
+    async initProfile() {
+      try {
+        await this.$store.dispatch("user/getTarget", this.authUserId);
+      } catch (e) {
+        console.error(e);
+        this.$q
+          .dialog({
+            title: "😭집사 조회 실패",
+            message: "고양이의 심술처럼 오류가 발생했습니다.",
+            ok: {
+              label: "확인",
+              unelevated: true,
+              color: "black",
+              dark: true
+            },
+            cancel: false,
+            persistent: true
+          })
+          .onOk(() => {})
+          .onDismiss(() => {});
+      }
+    },
     scrollToEnd() {
       const content = this.$refs.content;
       content.scrollTop = content.scrollHeight;
@@ -133,7 +160,7 @@ export default {
         {
           id: this.messages.length,
           name: "나",
-          avatar: "https://cdn.quasar.dev/img/avatar1.jpg",
+          avatar: this.userTarget.profile_img,
           text: this.myMessage,
           sent: true,
           textColor: "white",
@@ -164,7 +191,7 @@ export default {
             {
               id: this.messages.length,
               name: this.chatCats[this.catId].name,
-              avatar: "https://cataas.com/cat?type=sq",
+              avatar: this.chatCats[this.catId].profile,
               text: response.data.message,
               sent: false,
               textColor: "white",
