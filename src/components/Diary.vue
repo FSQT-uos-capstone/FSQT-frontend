@@ -20,16 +20,20 @@
       <div class="col User">
         <q-item class="q-px-none q-mx-none" :to="`/users/profile/${user.id}`">
           <q-item-section>
-            <q-item-label class="text-weight-bold text-right"
-              >집사닉네임</q-item-label
-            >
+            <q-item-label class="text-weight-bold text-right">
+              {{ profile.nickname }}
+            </q-item-label>
             <q-item-label class="text-weight-bold Caption text-right">{{
-              user.username.substring(0, 6)
+              user.email
             }}</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-avatar color="purple" text-color="white">
-              {{ user.username[0] }}
+            <q-avatar
+              v-if="!profile.profile_img_url"
+              color="grey"
+              text-color="white"
+            >
+              {{ profile.nickname[0] }}
               <!--<img :src="cat.profileUrl" />-->
             </q-avatar>
           </q-item-section>
@@ -42,7 +46,9 @@
       </div>
     </div>
     <div class="flex justify-center">
-      <div class="Content">{{ diaryContent.replace(".", "\n") }}</div>
+      <div class="Content">
+        {{ diaryContent ? diaryContent.replace(".", "\n") : "" }}
+      </div>
     </div>
     <div class="row">
       <div class="col flex justify-start">
@@ -124,6 +130,7 @@ export default {
     id: Number,
     cat: Object,
     user: Object,
+    profile: Object,
     date: String,
     dayOfTheWeek: String,
     photoUrl: String,

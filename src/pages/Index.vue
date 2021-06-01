@@ -1,17 +1,18 @@
 <template>
   <q-page class="column flex PageDiscoverIndex">
-    <vuescroll :ops="ops" class="column Diaries" @refresh-start="handleRS" @refresh-before-deactivate="handleRBD">
+    <vuescroll
+      :ops="ops"
+      class="column Diaries"
+      @refresh-start="handleRS"
+      @refresh-before-deactivate="handleRBD"
+    >
       <div class="child-element Title">
         고양이 일기장
       </div>
-      <div
-        v-if="!loaded"
-      >
+      <div v-if="!loaded">
         <DiarySkeleton style="padding-top: 20px"></DiarySkeleton>
       </div>
-      <div
-        v-else
-      >
+      <div v-else>
         <Diary
           v-for="diary in diaries"
           style="padding-top: 20px"
@@ -19,6 +20,7 @@
           :id="diary.id"
           :cat="diary.cat"
           :user="diary.user"
+          :profile="diary.profile"
           :date="diary.date"
           :dayOfTheWeek="diary.dayOfTheWeek"
           :photoUrl="diary.photoURL"
@@ -35,7 +37,7 @@
 <script>
 import Diary from "../components/Diary";
 import DiarySkeleton from "src/components/DiarySkeleton.vue";
-import vuescroll from "vuescroll"
+import vuescroll from "vuescroll";
 import { mapGetters } from "vuex";
 
 export default {
@@ -58,14 +60,14 @@ export default {
       loaded: false,
       ops: {
         vuescroll: {
-          mode: 'slide',
+          mode: "slide",
           pullRefresh: {
             enable: true,
             tips: {
-              deactive: '당겨서 새로 불러오기',
-              active: '놓아서 새로 불러오기',
-              start: '새로 불러오는 중...',
-              beforeDeactive: '새로 불러오기 성공!'
+              deactive: "당겨서 새로 불러오기",
+              active: "놓아서 새로 불러오기",
+              start: "새로 불러오는 중...",
+              beforeDeactive: "새로 불러오기 성공!"
             }
           },
           pushLoad: {
@@ -73,23 +75,23 @@ export default {
             auto: true,
             autoLoadDistance: 10,
             tips: {
-              deactive: '당겨서 불러오기',
-              active: '놓아서 불러오기',
-              start: '불러오는 중...',
-              beforeDeactive: '불러오기 성공!'
+              deactive: "당겨서 불러오기",
+              active: "놓아서 불러오기",
+              start: "불러오는 중...",
+              beforeDeactive: "불러오기 성공!"
             }
           }
         },
         bar: {
-          disable: true,
+          disable: true
         },
         scrollPanel: {
           scrollingY: true,
           speed: 800,
           easing: "easeInOutQuad",
-          verticalNativeBarPos: 'right'
+          verticalNativeBarPos: "right"
         }
-      },
+      }
     };
   },
   methods: {
@@ -130,7 +132,7 @@ export default {
       setTimeout(() => {
         done();
       }, 500);
-    },
+    }
   }
 };
 </script>
