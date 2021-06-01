@@ -32,14 +32,68 @@ export async function getListDefault({ commit }) {
   }
 }
 
+export async function appendListDefault({ getters, commit }) {
+  try {
+    const res = await this._vm.$api.get(
+      `/diary/?lastId=${getters["list"][getters["list"].length - 1].id - 5}`
+    );
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit(
+      "appendList",
+      res.data["diary_list"]
+        .sort((x, y) => x.id > y.id)
+        .map(x => {
+          const dateObj = new Date(x.created);
+          x.date = `${dateObj.getFullYear()}년 ${dateObj.getMonth() +
+            1}월 ${dateObj.getDate()}일`;
+          x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
+          if (x.tags) x.tags = x.tags.split(",");
+          return x;
+        })
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
 export async function getListSpecificUser({ commit }, payload) {
   try {
-    const res = await this._vm.$api.get(`/diary?userId=${payload.userId}`);
+    const res = await this._vm.$api.get(`/diary/?userId=${payload.userId}`);
     if (res.status !== 200) {
       throw new Error(res.status + " " + res.statusText);
     }
     commit(
       "setList",
+      res.data["diary_list"]
+        .sort((x, y) => x.id > y.id)
+        .map(x => {
+          const dateObj = new Date(x.created);
+          x.date = `${dateObj.getFullYear()}년 ${dateObj.getMonth() +
+            1}월 ${dateObj.getDate()}일`;
+          x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
+          if (x.tags) x.tags = x.tags.split(",");
+          return x;
+        })
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function appendListSpecificUser({ getters, commit }, payload) {
+  try {
+    const res = await this._vm.$api.get(
+      `/diary/?userId=${payload.userId}&lastId=${
+        getters["list"][getters["list"].length - 1].id
+      }`
+    );
+    if (res.status !== 200) {
+      throw new Error(res.status + " " + res.statusText);
+    }
+    commit(
+      "appendList",
       res.data["diary_list"]
         .sort((x, y) => x.id > y.id)
         .map(x => {

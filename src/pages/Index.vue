@@ -5,6 +5,8 @@
       class="column Diaries"
       @refresh-start="handleRS"
       @refresh-before-deactivate="handleRBD"
+      @load-before-deactivate="handleLBD"
+      @load-start="handleLoadStart"
     >
       <div class="child-element Title">
         고양이 일기장
@@ -124,6 +126,34 @@ export default {
           });
       }
     },
+    async appendNewDiaryList() {
+      this.loaded = false;
+      try {
+        await this.$store.dispatch("diary/appendListDefault");
+        this.loaded = true;
+      } catch (e) {
+        console.error(e);
+        this.$q
+          .dialog({
+            title: "😭고양이 일기장 가져오기 실패",
+            message: "고양이의 심술처럼 오류가 발생했습니다.",
+            ok: {
+              label: "확인",
+              unelevated: true,
+              color: "black",
+              dark: true
+            },
+            cancel: false,
+            persistent: true
+          })
+          .onOk(() => {
+            this.$router.push("/gate");
+          })
+          .onDismiss(() => {
+            this.$router.push("/gate");
+          });
+      }
+    },
     async handleRS(vsInstance, refreshDom, done) {
       const vm = this;
       await this.refreshDiaryList();
@@ -133,6 +163,15 @@ export default {
       setTimeout(() => {
         done();
       }, 500);
+    },
+    handleLoadStart(vm, dom, done) {
+      setTimeout(() => {
+        done();
+      }, 500);
+    },
+    async handleLBD(vm, loadDom, done) {
+      await this.appendNewDiaryList();
+      done();
     }
   }
 };
