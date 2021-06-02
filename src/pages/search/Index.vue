@@ -1,81 +1,78 @@
 <template>
   <q-page class="column flex Search">
-    <div class="column" style="width: 100vw">
-      <div class="Title">
-        일기장 찾기
-      </div>
-      <div class="List items-start justify-between content-start q-px-md">
-        <q-input
-          outlined
-          square
-          @keyup.prevent="handleSearch"
-          v-bind:value="search"
-          color="black"
-          class="InputSearch"
-          placeholder="해시태그"
-          @loading="searching"
-        >
-          <template v-slot:prepend>
-            <q-icon name="eva-search-outline" />
-          </template>
-        </q-input>
-        <q-dialog
-          v-model="showSelectedDiary"
-          transition-show="scale"
-          transition-hide="scale"
-          @before-hide="unselectDiary"
-        >
-          <q-card
-            style="padding: 10px; min-width: calc(100vw - 40px); max-width: calc(100vw - 40px); width: calc(100vw - 40px)"
-          >
-            <Diary
-              v-if="selectedDiary.id === -1"
-              :id="selectedDiary.id"
-              :cat="selectedDiary.cat"
-              :user="selectedDiary.user"
-              :profile="selectedDiary.profile"
-              :date="selectedDiary.date"
-              :dayOfTheWeek="selectedDiary.dayOfTheWeek"
-              :photoUrl="selectedDiary.photoURL"
-              :diaryContent="selectedDiary.content"
-              :emotions="selectedDiary.emotions"
-              :tags="selectedDiary.tags"
-            ></Diary>
-            <Diary
-              v-else
-              :id="diaries[selectedDiary.idx].id"
-              :cat="diaries[selectedDiary.idx].cat"
-              :user="diaries[selectedDiary.idx].user"
-              :profile="diaries[selectedDiary.idx].profile"
-              :date="diaries[selectedDiary.idx].date"
-              :dayOfTheWeek="diaries[selectedDiary.idx].dayOfTheWeek"
-              :photoUrl="diaries[selectedDiary.idx].photoURL"
-              :diaryContent="diaries[selectedDiary.idx].content"
-              :emotions="diaries[selectedDiary.idx].emotions"
-              :tags="diaries[selectedDiary.idx].tags"
-            ></Diary>
-          </q-card>
-        </q-dialog>
-        <div
-          v-if="diaries.length === 0 || !search || search === ''"
-          class="row"
-        >
-          <q-chip v-for="(tag, idx) in tags" :key="idx">
-            {{ tag }}
-          </q-chip>
-        </div>
-        <div v-else>
-          <q-img
-            v-for="(diary, idx) in diaries"
-            :src="diary.photoURL"
-            width="45%"
-            class="q-mb-md"
-            :ratio="1"
-            :key="diary.id"
-            @click="selectDiary(diary, idx)"
-          />
-        </div>
-      </div>
+    <div class="Title">
+      일기장 찾기
+    </div>
+    <q-input
+      outlined
+      square
+      @keyup.prevent="handleInputSearch"
+      v-bind:value="search"
+      type="text"
+      maxlength="12"
+      debounce="500"
+      color="black"
+      class="InputSearch"
+      placeholder="해시태그"
+      :rules="[searchByInput]"
+      :loading="searching"
+    >
+      <template v-slot:prepend>
+        <q-icon name="eva-search-outline" />
+      </template>
+    </q-input>
+    <q-dialog
+      v-model="showSelectedDiary"
+      transition-show="scale"
+      transition-hide="scale"
+      @before-hide="unselectDiary"
+    >
+      <q-card
+        style="padding: 10px; min-width: calc(100vw - 40px); max-width: calc(100vw - 40px); width: calc(100vw - 40px)"
+      >
+        <Diary
+          v-if="selectedDiary.id === -1"
+          :id="selectedDiary.id"
+          :cat="selectedDiary.cat"
+          :user="selectedDiary.user"
+          :profile="selectedDiary.profile"
+          :date="selectedDiary.date"
+          :dayOfTheWeek="selectedDiary.dayOfTheWeek"
+          :photoUrl="selectedDiary.photoURL"
+          :diaryContent="selectedDiary.content"
+          :emotions="selectedDiary.emotions"
+          :tags="selectedDiary.tags"
+        ></Diary>
+        <Diary
+          v-else
+          :id="diaries[selectedDiary.idx].id"
+          :cat="diaries[selectedDiary.idx].cat"
+          :user="diaries[selectedDiary.idx].user"
+          :profile="diaries[selectedDiary.idx].profile"
+          :date="diaries[selectedDiary.idx].date"
+          :dayOfTheWeek="diaries[selectedDiary.idx].dayOfTheWeek"
+          :photoUrl="diaries[selectedDiary.idx].photoURL"
+          :diaryContent="diaries[selectedDiary.idx].content"
+          :emotions="diaries[selectedDiary.idx].emotions"
+          :tags="diaries[selectedDiary.idx].tags"
+        ></Diary>
+      </q-card>
+    </q-dialog>
+    <div v-if="diaries.length === 0 || !search || search === ''" class="row">
+      <q-chip v-for="(tag, idx) in tags" :key="idx">
+        {{ tag }}
+      </q-chip>
+    </div>
+    <div v-else class="fit row wrap justify-between" style="margin-top: 20px">
+      <q-img
+        v-for="(diary, idx) in diaries"
+        :src="diary.photoURL"
+        width="47.5%"
+        class="q-mb-md"
+        :ratio="1"
+        :key="diary.id"
+        @click="selectDiary(diary, idx)"
+      />
     </div>
   </q-page>
 </template>
@@ -160,37 +157,29 @@ export default {
       });
       this.showSelectedDiary = false;
     },
-    handleSearch($event) {
-      this.debounce(async () => {
-        this.search = $event.target.value;
-        if (this.search === "" || !this.search) {
-          this.searching = false;
-          return;
-        }
-        try {
-          await this.$store.dispatch("diary/getListSpecificTag", this.search);
-          this.searching = true;
-        } catch (e) {
-          console.error(e);
-          this.$q
-            .dialog({
-              title: "😭고양이 목록 가져오기 실패",
-              message: "고양이의 심술처럼 오류가 발생했습니다.",
-              ok: {
-                label: "확인",
-                unelevated: true,
-                color: "black",
-                dark: true
-              },
-              cancel: false,
-              persistent: true
-            })
-            .onOk(() => {})
-            .onDismiss(() => {});
-        } finally {
-          this.searching = false;
-        }
-      }, 800);
+    handleInputSearch($event) {
+      this.debounce(() => (this.search = $event.target.value), 500);
+    },
+    searchByInput(val) {
+      this.searching = true;
+      if (!val) {
+        this.searching = false;
+        return true;
+      }
+      return new Promise((resolve, reject) => {
+        this.$store
+          .dispatch("diary/getListSpecificTag", this.search)
+          .then(() => {
+            resolve(true);
+          })
+          .catch(() => {
+            this.$store.commit("diary/setList", []);
+            resolve("입력한 내용으로 찾을 수 없습니다 😢");
+          })
+          .finally(() => {
+            this.searching = false;
+          });
+      });
     }
   }
 };
@@ -198,12 +187,12 @@ export default {
 
 <style lang="scss">
 .Search {
-  overflow-y: hidden;
+  margin-left: 20px;
+  margin-right: 20px;
   .Title {
     color: #000000;
     font-size: 2.27rem;
     font-weight: medium;
-    padding-left: 20px;
   }
   .InputSearch {
     min-width: 100%;
@@ -211,7 +200,8 @@ export default {
     .q-field__control::before {
       border: 2px solid #000000;
     }
-    padding-bottom: 10px;
+    padding-top: 20px;
+    padding-bottom: 30px;
   }
   .List {
     width: 100%;
