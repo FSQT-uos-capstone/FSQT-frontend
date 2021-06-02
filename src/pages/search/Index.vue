@@ -63,7 +63,7 @@
         {{ tag }}
       </q-chip>
     </div>
-    <div v-else class="fit row wrap justify-between" style="margin-top: 20px">
+    <div class="fit row wrap justify-between" style="margin-top: 20px">
       <q-img
         v-for="(diary, idx) in diaries"
         :src="diary.photoURL"
@@ -95,6 +95,7 @@ export default {
   mixins: [DebounceMixin],
   async mounted() {
     this.$store.commit("diary/setList", []);
+    await this.refreshDiaryList();
   },
   data() {
     return {
@@ -164,6 +165,7 @@ export default {
       this.searching = true;
       if (!val) {
         this.searching = false;
+        this.refreshDiaryList();
         return true;
       }
       return new Promise((resolve, reject) => {
@@ -180,6 +182,34 @@ export default {
             this.searching = false;
           });
       });
+    },
+    async refreshDiaryList() {
+      this.loaded = false;
+      try {
+        await this.$store.dispatch("diary/getListDefault");
+        this.loaded = true;
+      } catch (e) {
+        console.error(e);
+        this.$q
+          .dialog({
+            title: "😭고양이 일기장 가져오기 실패",
+            message: "고양이의 심술처럼 오류가 발생했습니다.",
+            ok: {
+              label: "확인",
+              unelevated: true,
+              color: "black",
+              dark: true
+            },
+            cancel: false,
+            persistent: true
+          })
+          .onOk(() => {
+            this.$router.push("/gate");
+          })
+          .onDismiss(() => {
+            this.$router.push("/gate");
+          });
+      }
     }
   }
 };
