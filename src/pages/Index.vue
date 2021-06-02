@@ -15,21 +15,22 @@
         <DiarySkeleton style="padding-top: 20px"></DiarySkeleton>
       </div>
       <div v-else>
-        <Diary
-          v-for="diary in diaries"
-          style="padding-top: 20px"
-          :key="diary.id"
-          :id="diary.id"
-          :cat="diary.cat"
-          :user="diary.user"
-          :profile="diary.profile"
-          :date="diary.date"
-          :dayOfTheWeek="diary.dayOfTheWeek"
-          :photoUrl="diary.photoURL"
-          :diaryContent="diary.content"
-          :emotions="diary.emotions"
-          :tags="diary.tags"
-        ></Diary>
+        <template v-for="diary in diaries">
+          <Diary
+            style="padding-top: 20px"
+            :key="diary.id"
+            :id="diary.id"
+            :cat="diary.cat"
+            :user="diary.user"
+            :profile="diary.profile"
+            :date="diary.date"
+            :dayOfTheWeek="diary.dayOfTheWeek"
+            :photoUrl="diary.photoURL"
+            :diaryContent="diary.content"
+            :emotions="diary.emotions"
+            :tags="diary.tags"
+          ></Diary>
+        </template>
       </div>
     </vuescroll>
     <div style="height: 12vh"></div>

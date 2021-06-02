@@ -24,6 +24,7 @@ export async function getListDefault({ commit }) {
             1}월 ${dateObj.getDate()}일`;
           x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
           if (x.tags) x.tags = x.tags.split(",");
+          if (x.content) x.content = x.content.replace(".", "\n");
           return x;
         })
     );
@@ -35,7 +36,7 @@ export async function getListDefault({ commit }) {
 export async function appendListDefault({ getters, commit }) {
   try {
     const res = await this._vm.$api.get(
-      `/diary/?lastId=${getters["list"][getters["list"].length - 1].id - 5}`
+      `/diary/?lastId=${getters["list"][getters["list"].length - 1].id}`
     );
     if (res.status !== 200) {
       throw new Error(res.status + " " + res.statusText);
@@ -50,6 +51,7 @@ export async function appendListDefault({ getters, commit }) {
             1}월 ${dateObj.getDate()}일`;
           x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
           if (x.tags) x.tags = x.tags.split(",");
+          if (x.content) x.content = x.content.replace(".", "\n");
           return x;
         })
     );
@@ -74,6 +76,7 @@ export async function getListSpecificUser({ commit }, payload) {
             1}월 ${dateObj.getDate()}일`;
           x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
           if (x.tags) x.tags = x.tags.split(",");
+          if (x.content) x.content = x.content.replace(".", "\n");
           return x;
         })
     );
@@ -102,6 +105,7 @@ export async function appendListSpecificUser({ getters, commit }, payload) {
             1}월 ${dateObj.getDate()}일`;
           x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
           if (x.tags) x.tags = x.tags.split(",");
+          if (x.content) x.content = x.content.replace(".", "\n");
           return x;
         })
     );
@@ -126,6 +130,7 @@ export async function getListSpecificTag({ commit }, payload) {
             1}월 ${dateObj.getDate()}일`;
           x.dayOfTheWeek = dayOfTheWeek[dateObj.getDay()];
           if (x.tags) x.tags = x.tags.split(",");
+          if (x.content) x.content = x.content.replace(".", "\n");
           return x;
         })
     );

@@ -50,9 +50,7 @@
       </div>
     </div>
     <div class="flex justify-center">
-      <div class="Content">
-        {{ diaryContent ? diaryContent.replace(".", "\n") : "" }}
-      </div>
+      <div class="Content">{{ diaryContent }}</div>
     </div>
     <div class="row">
       <q-chip v-for="(tag, idx) in tags" :key="idx">
@@ -212,7 +210,7 @@ export default {
     height: 100%;
     max-height: 100%;
     overflow-y: scroll;
-    white-space: pre-wrap;
+    white-space: pre;
   }
 }
 </style>
