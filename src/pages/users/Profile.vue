@@ -153,10 +153,7 @@
         ></Diary>
       </q-card>
     </q-dialog>
-    <div
-      class="fit row wrap justify-between"
-      style="width: calc(100vw - 40px); max-width: calc(100vw - 40px); min-width: calc(100vw - 40px); margin-top: 20px; margin-left: 20px; margin-right: 20px"
-    >
+    <div class="fit row wrap justify-between" style="margin-top: 20px">
       <q-img
         v-for="(diary, idx) in diaries"
         :src="diary.photoURL"
@@ -362,6 +359,8 @@ export default {
 
 <style lang="scss">
 .Profile {
+  margin-left: 20px;
+  margin-right: 20px;
   .Avatar {
     font-size: 12px;
   }
