@@ -45,6 +45,7 @@
               placeholder-color="#000"
               canvas-color="transparent"
               :show-loading="true"
+              @new-image-drawn="handleNewImageDrawn"
             ></croppa>
 
             <q-stepper-navigation>
@@ -222,6 +223,11 @@ export default {
     };
   },
   methods: {
+    handleNewImageDrawn() {
+      if (this.myCroppa.orientation === 6) {
+        this.myCroppa.rotate(-1);
+      }
+    },
     setDiaryFormTags(payload) {
       this.$store.commit("diary/setFormTags", payload);
     },
