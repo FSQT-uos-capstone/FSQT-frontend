@@ -2,6 +2,11 @@
 
 집사들이 돕는 길고양이들의 일기장
 
+## Dependency
+
+* Node.js (Work good in v12.19.0)
+* Yarn (work good in 1.22.10)
+
 ## Install the dependencies
 ```bash
 yarn
@@ -21,6 +26,7 @@ yarn run lint
 ### Build the app for production
 ```bash
 quasar build
+quasar build -m capacitor -T android
 ```
 
 ### Customize the configuration
